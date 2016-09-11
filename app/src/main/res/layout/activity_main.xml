@@ -34,7 +34,8 @@
             android:textAllCaps="true"
             android:textColor="@color/app_red"
             android:textSize="100sp"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            />
 
     </RelativeLayout>
 
@@ -46,9 +47,18 @@
         android:text="Colour"
         android:textSize="40sp"/>
 
+    <!--This is for the TextViews to be placed containing the letters already used-->
+    <LinearLayout
+        android:id="@+id/used_letters_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".5"
+        android:gravity="center"
+        android:orientation="horizontal"></LinearLayout>
+
     <!--This is for the TextViews to be placed containing the letters of the random word-->
     <LinearLayout
-        android:id="@+id/linear_layout"
+        android:id="@+id/current_letters_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
