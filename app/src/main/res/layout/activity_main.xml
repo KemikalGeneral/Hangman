@@ -6,13 +6,14 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    android:background="@drawable/lined_paper_background"
     tools:context="com.endorphinapps.kemikal.hangman.MainActivity">
 
     <RelativeLayout
         android:id="@+id/hangman_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2">
+        android:layout_weight="4">
 
         <ImageView
             android:id="@+id/iv_hangman"
@@ -34,8 +35,7 @@
             android:textAllCaps="true"
             android:textColor="@color/app_red"
             android:textSize="100sp"
-            android:visibility="invisible"
-            />
+            android:visibility="invisible" />
 
     </RelativeLayout>
 
@@ -45,23 +45,24 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Colour"
-        android:textSize="40sp"/>
+        android:textSize="56sp"
+        android:letterSpacing="0.25"/>
 
     <!--This is for the TextViews to be placed containing the letters already used-->
     <LinearLayout
         android:id="@+id/used_letters_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight=".5"
         android:gravity="center"
-        android:orientation="horizontal"></LinearLayout>
+        android:orientation="horizontal"
+        android:layout_weight="1"></LinearLayout>
 
     <!--This is for the TextViews to be placed containing the letters of the random word-->
     <LinearLayout
         android:id="@+id/current_letters_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:gravity="center"
         android:orientation="horizontal"></LinearLayout>
 
@@ -72,11 +73,9 @@
 
         <Button
             android:id="@+id/btn_reset"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/app_red"
-            android:onClick="resetGame"
+            style="@style/button"
+            android:background="@drawable/button_style"
+            android:backgroundTint="@color/app_red"
             android:text="Reset" />
 
         <EditText
@@ -85,14 +84,17 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:inputType="text"
-            android:maxLength="1" />
+            android:maxLength="1"
+            android:hint="...pick a letter..."
+            android:gravity="center"
+            android:textSize="24sp"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"/>
 
         <Button
             android:id="@+id/btn_enter_letter"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/app_green"
+            style="@style/button"
+            android:background="@drawable/button_style"
+            android:backgroundTint="@color/app_green"
             android:text="Go" />
     </LinearLayout>
 

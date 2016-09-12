@@ -2,7 +2,7 @@ package com.endorphinapps.kemikal.hangman;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -40,11 +40,15 @@ public class MainActivity extends AppCompatActivity {
     private int wrongAnswerCounter;
     private TextView tv_winLose;
     private InputMethodManager inputMethodManager;
+    private Typeface typeface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Set font
+        typeface = Typeface.createFromAsset(getAssets(), "fonts/crayon_font.ttf");
 
         //Find all views
         findViews();
@@ -90,11 +94,16 @@ public class MainActivity extends AppCompatActivity {
         currentLettersContainer = (LinearLayout) findViewById(R.id.current_letters_container);
         usedLettersContainer = (LinearLayout) findViewById(R.id.used_letters_container);
         tv_category = (TextView) findViewById(R.id.tv_category);
-        btn_reset = (Button) findViewById(R.id.btn_reset);
-        et_inputtedLetter = (EditText) findViewById(R.id.ed_inputted_letter);
-        btn_go = (Button) findViewById(R.id.btn_enter_letter);
-        iv_hangman = (ImageView) findViewById(R.id.iv_hangman);
+            tv_category.setTypeface(typeface);
         tv_winLose = (TextView) findViewById(R.id.tv_winLose);
+            tv_winLose.setTypeface(typeface);
+        btn_reset = (Button) findViewById(R.id.btn_reset);
+            btn_reset.setTypeface(typeface);
+        btn_go = (Button) findViewById(R.id.btn_enter_letter);
+            btn_go.setTypeface(typeface);
+        et_inputtedLetter = (EditText) findViewById(R.id.ed_inputted_letter);
+            et_inputtedLetter.setTypeface(typeface);
+        iv_hangman = (ImageView) findViewById(R.id.iv_hangman);
     }
 
     /** Start the game **/
@@ -157,17 +166,20 @@ public class MainActivity extends AppCompatActivity {
      /** @param letters
      */
     private void createViewsForLetters(List<String> letters) {
+        //Loop through the letters in the array
         for (String letter : letters) {
+            //Create a new TextView
             tv_splitWordLetters = new TextView(this);
-            //Set TAG as the same value as the letter it contains
+            //Set TAG to the same value as the letter it contains
             tv_splitWordLetters.setTag(letter);
             //Styling
             tv_splitWordLetters.setText(letter);
-            tv_splitWordLetters.setTextSize(50);
+            tv_splitWordLetters.setTextSize(56);
             tv_splitWordLetters.setTextColor(Color.parseColor("#00000000"));
             tv_splitWordLetters.setAllCaps(true);
             tv_splitWordLetters.setLetterSpacing(0.25f);
             tv_splitWordLetters.setBackgroundResource(R.drawable.box_outline);
+            tv_splitWordLetters.setTypeface(typeface);
             //Add views to layout
             currentLettersContainer.addView(tv_splitWordLetters);
         }
@@ -217,7 +229,8 @@ public class MainActivity extends AppCompatActivity {
                 mediaPlayer.start();
                 //Make the letter visible;
                 TextView tv = (TextView) view;
-                tv.setTextColor(Color.GRAY);
+                tv.setTextColor(Color.BLACK);
+                tv.setTypeface(typeface);
                 //If all the letters have been shown
                 if (correctAnswerCounter == letters.size()) {
                     youWin();
@@ -287,9 +300,10 @@ public class MainActivity extends AppCompatActivity {
     private void youWin() {
         //Set hangman image to half transparency
         iv_hangman.setAlpha(0.25f);
-        //Set text to Win, Green and Visible
+        //Set text to Win, Green, Font and Visible
         tv_winLose.setText("WIN");
         tv_winLose.setTextColor(Color.GREEN);
+        tv_winLose.setTypeface(typeface);
         tv_winLose.setVisibility(View.VISIBLE);
         //Disable the keyboard from further entries
         et_inputtedLetter.setShowSoftInputOnFocus(false);
@@ -303,9 +317,10 @@ public class MainActivity extends AppCompatActivity {
     private void youLose() {
         //Set hangman image to half transparency
         iv_hangman.setAlpha(0.25f);
-        //Set text to DEAD, Red and visible
+        //Set text to DEAD, Red, Font and visible
         tv_winLose.setText("DEAD");
         tv_winLose.setTextColor(Color.RED);
+        tv_winLose.setTypeface(typeface);
         tv_winLose.setVisibility(View.VISIBLE);
         //Disable the keyboard from further entries
         et_inputtedLetter.setShowSoftInputOnFocus(false);
@@ -331,15 +346,19 @@ public class MainActivity extends AppCompatActivity {
         if (usedLettersContainer.getChildCount() == 0) {
             TextView tv_label = new TextView(this);
             tv_label.setText("Used letters: ");
+            tv_label.setTextSize(24);
+            tv_label.setTextColor(Color.GRAY);
+            tv_label.setTypeface(typeface);
             usedLettersContainer.addView(tv_label);
         }
         //Create new text views for each letter entered
         TextView tv_usedLetter = new TextView(this);
         tv_usedLetter.setText(currentLetter);
-        tv_usedLetter.setTextSize(24);
+        tv_usedLetter.setTextSize(32);
+        tv_usedLetter.setTextColor(Color.RED);
         tv_usedLetter.setAllCaps(true);
         tv_usedLetter.setLetterSpacing(0.25f);
-        tv_usedLetter.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+        tv_usedLetter.setTypeface(typeface);
         usedLettersContainer.addView(tv_usedLetter);
     }
 }
