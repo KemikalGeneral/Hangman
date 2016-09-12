@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/page_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/lined_paper_background"
+    android:gravity="center"
+    android:orientation="horizontal"
+    tools:context="com.endorphinapps.kemikal.hangman.MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/hangman_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/iv_hangman"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/hangman_0" />
+
+        <TextView
+            android:id="@+id/tv_winLose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:letterSpacing=".25"
+            android:shadowColor="#000"
+            android:shadowDx="0"
+            android:shadowDy="4"
+            android:shadowRadius="20"
+            android:text="@string/tv_you_lose"
+            android:textAllCaps="true"
+            android:textColor="@color/app_red"
+            android:textSize="100sp"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:letterSpacing="0.25"
+            android:text="@string/tv_category"
+            android:textSize="56sp" />
+
+        <!--This is for the TextViews to be placed containing the letters already used-->
+        <LinearLayout
+            android:id="@+id/used_letters_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"></LinearLayout>
+
+        <!--This is for the TextViews to be placed containing the letters of the random word-->
+        <LinearLayout
+            android:id="@+id/current_letters_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:orientation="horizontal"></LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_reset"
+                style="@style/button"
+                android:background="@drawable/button_style"
+                android:backgroundTint="@color/app_red"
+                android:text="@string/btn_reset" />
+
+            <EditText
+                android:id="@+id/ed_inputted_letter"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                android:gravity="center"
+                android:hint="@string/et_hint"
+                android:inputType="text"
+                android:maxLength="1"
+                android:textSize="24sp" />
+
+            <Button
+                android:id="@+id/btn_enter_letter"
+                style="@style/button"
+                android:background="@drawable/button_style"
+                android:backgroundTint="@color/app_green"
+                android:text="@string/btn_go" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
