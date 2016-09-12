@@ -31,7 +31,7 @@
             android:shadowDx="0"
             android:shadowDy="4"
             android:shadowRadius="20"
-            android:text="Dead"
+            android:text="@string/tv_you_lose"
             android:textAllCaps="true"
             android:textColor="@color/app_red"
             android:textSize="100sp"
@@ -44,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Colour"
+        android:text="@string/tv_category"
         android:textSize="56sp"
         android:letterSpacing="0.25"/>
 
@@ -76,7 +76,7 @@
             style="@style/button"
             android:background="@drawable/button_style"
             android:backgroundTint="@color/app_red"
-            android:text="Reset" />
+            android:text="@string/btn_reset" />
 
         <EditText
             android:id="@+id/ed_inputted_letter"
@@ -85,7 +85,7 @@
             android:layout_weight="2"
             android:inputType="text"
             android:maxLength="1"
-            android:hint="...pick a letter..."
+            android:hint="@string/et_hint"
             android:gravity="center"
             android:textSize="24sp"
             android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"/>
@@ -95,7 +95,7 @@
             style="@style/button"
             android:background="@drawable/button_style"
             android:backgroundTint="@color/app_green"
-            android:text="Go" />
+            android:text="@string/btn_go" />
     </LinearLayout>
 
 </LinearLayout>

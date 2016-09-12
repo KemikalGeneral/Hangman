@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Hangman</string>
+    <string name="tv_you_lose">Dead</string>
+    <string name="tv_category">Colour</string>
+    <string name="btn_reset">Reset</string>
+    <string name="et_hint">...pick a letter...</string>
+    <string name="btn_go">Go</string>
 </resources>
