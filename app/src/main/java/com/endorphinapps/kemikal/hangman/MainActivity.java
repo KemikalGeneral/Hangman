@@ -5,7 +5,9 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -41,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_winLose;
     private InputMethodManager inputMethodManager;
     private Typeface typeface;
+    private Boolean isTimed;
+    private CountDownTimer countDownTimer;
+    private Boolean isTimerRunning;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -55,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Initialise Word Bank
         wordBank = new WordBank();
+
+        //Check whether the game is timed or not
+        isTimed = getIntent().getBooleanExtra("IS_TIMED", false);
 
         //Start Game
         //Generate a random word from the word bank
@@ -129,6 +137,13 @@ public class MainActivity extends AppCompatActivity {
         createViewsForLetters(letters);
 
         et_inputtedLetter.setShowSoftInputOnFocus(true);
+
+        //If it is a TIMED game, start timer, if not, set running to false
+        if (isTimed) {
+            introCounter();
+        } else {
+            isTimerRunning = false;
+        }
     }
 
     /** Generate a Random Word From Word Bank **/
@@ -279,6 +294,10 @@ public class MainActivity extends AppCompatActivity {
      */
     private void resetGame() {
         clearAndHideKeyboard();
+        //Stop the count down timer if it's running
+        if (isTimerRunning) {
+            countDownTimer.cancel();
+        }
         //Clear both counters
         correctAnswerCounter = 0;
         wrongAnswerCounter = 0;
@@ -298,6 +317,8 @@ public class MainActivity extends AppCompatActivity {
 
     /** You Win **/
     private void youWin() {
+        //Stop the countdown timer if it's running
+        countDownTimer.cancel();
         //Set hangman image to half transparency
         iv_hangman.setAlpha(0.25f);
         //Set text to Win, Green, Font and Visible
@@ -360,5 +381,62 @@ public class MainActivity extends AppCompatActivity {
         tv_usedLetter.setLetterSpacing(0.25f);
         tv_usedLetter.setTypeface(typeface);
         usedLettersContainer.addView(tv_usedLetter);
+    }
+
+    /** INTRO Count Down Timer 3-2-1 for timed game **/
+    /**
+     * Starts timer
+     * countDownTimer() when the timer has finished
+     */
+    private void introCounter() {
+        //Set length of time for countdown 3-2-1
+        long time = 3000;
+
+        CountDownTimer introTimer = new CountDownTimer(time, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                Log.v("z!", "Countdown" + millisUntilFinished);
+                tv_winLose.setText("" + millisUntilFinished / 1000);
+                tv_winLose.setTextColor(getResources().getColor(R.color.pink));
+                tv_winLose.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onFinish() {
+                Log.v("z!", "Finshed");
+                countDownTimer();
+            }
+        };
+        introTimer.start();
+    }
+
+    /** Count Down Timer for timed game **/
+    /**
+     * Starts timer
+     * youLose() if the timer finished without being cancelled (win)
+     */
+    private void countDownTimer() {
+        //Get number of letters in the split current word array
+        int numberOfLettersInArray = letters.size();
+        //Set length of time for countdown, 5seconds per letter
+        long time = numberOfLettersInArray * 5000;
+        countDownTimer = new CountDownTimer(time, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                Log.v("z!", "Counting Down" + millisUntilFinished);
+                isTimerRunning = true;
+                tv_winLose.setText("" + millisUntilFinished / 1000);
+                tv_winLose.setTextColor(getResources().getColor(R.color.pink));
+                tv_winLose.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onFinish() {
+                Log.v("z!", "Finshed");
+                isTimerRunning = false;
+                youLose();
+            }
+        };
+        countDownTimer.start();
     }
 }

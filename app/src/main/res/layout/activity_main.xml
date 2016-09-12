@@ -7,7 +7,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:background="@drawable/lined_paper_background"
-    tools:context="com.endorphinapps.kemikal.hangman.MainActivity">
+    tools:context=".MainActivity">
 
     <RelativeLayout
         android:id="@+id/hangman_container"
@@ -33,7 +33,7 @@
             android:shadowRadius="20"
             android:text="@string/tv_you_lose"
             android:textAllCaps="true"
-            android:textColor="@color/app_red"
+            android:textColor="@color/red"
             android:textSize="100sp"
             android:visibility="invisible" />
 
@@ -75,7 +75,7 @@
             android:id="@+id/btn_reset"
             style="@style/button"
             android:background="@drawable/button_style"
-            android:backgroundTint="@color/app_red"
+            android:backgroundTint="@color/red"
             android:text="@string/btn_reset" />
 
         <EditText
@@ -94,7 +94,7 @@
             android:id="@+id/btn_enter_letter"
             style="@style/button"
             android:background="@drawable/button_style"
-            android:backgroundTint="@color/app_green"
+            android:backgroundTint="@color/green"
             android:text="@string/btn_go" />
     </LinearLayout>
 
