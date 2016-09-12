@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_category;
     private LinearLayout currentLettersContainer;
     private LinearLayout usedLettersContainer;
+    private List<String> usedLettersArray = new ArrayList<>();
     private String word;
     private List<String> letters;
     private String currentLetter;
@@ -177,22 +178,27 @@ public class MainActivity extends AppCompatActivity {
      */
     private void actionUserEntry(List<String> letters) {
         currentLetter = et_inputtedLetter.getText().toString().toLowerCase().trim();
-        //Hide the keyboard
-        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        //Clear and hide the keyboard
+        clearAndHideKeyboard();
         //If nothing has been entered show a toast
         if (currentLetter.isEmpty()) {
             Toast.makeText(getApplicationContext(), "You must enter something!", Toast.LENGTH_LONG).show();
         } else {
-            //If the letter is valid
-            if (letters.toString().contains(currentLetter)) {
-                correctAnswer();
+            //If the letter has already been used show a toast
+            if (usedLettersArray.contains(currentLetter)) {
+                Toast.makeText(getApplicationContext(), "You've already used the letter " + currentLetter + "!", Toast.LENGTH_SHORT).show();
+            } else {
+                //Add the current letter to the array of used letters and show on screen
+                addToUsedLetters(currentLetter);
+                //If the letter is valid
+                if (letters.toString().contains(currentLetter)) {
+                    correctAnswer();
+                }
+                //Else if the letter is invalid
+                else {
+                    wrongAnswer();
+                }
             }
-            //Else if the letter is invalid
-            else {
-                wrongAnswer();
-            }
-            addToUsedLetters(currentLetter);
         }
         clearAndHideKeyboard();
     }
@@ -263,6 +269,9 @@ public class MainActivity extends AppCompatActivity {
         //Clear both counters
         correctAnswerCounter = 0;
         wrongAnswerCounter = 0;
+        //Clear used letters
+        usedLettersContainer.removeAllViews();
+        usedLettersArray.clear();
         //Clear text
         tv_winLose.setText("");
         //Reset hangman image
@@ -316,6 +325,8 @@ public class MainActivity extends AppCompatActivity {
      * @param currentLetter
      */
     private void addToUsedLetters(String currentLetter) {
+        //Add letter to the used letters array
+        usedLettersArray.add(currentLetter);
         //If the container is empty, add a label
         if (usedLettersContainer.getChildCount() == 0) {
             TextView tv_label = new TextView(this);
