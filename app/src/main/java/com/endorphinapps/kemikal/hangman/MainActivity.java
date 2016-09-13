@@ -1,6 +1,7 @@
 package com.endorphinapps.kemikal.hangman;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
@@ -10,10 +11,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +26,10 @@ import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
+
+    //Nav Drawer
+    private ListView listView;
+    private ArrayAdapter<String> arrayAdapter;
 
     private LinearLayout ll_pageContainer;
     private WordBank wordBank;
@@ -46,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private Boolean isTimed;
     private CountDownTimer countDownTimer;
     private Boolean isTimerRunning;
+    private int wordLengthSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -58,11 +67,15 @@ public class MainActivity extends AppCompatActivity {
         //Find all views
         findViews();
 
+        //Setup Nav Drawer
+        addDrawerItemAnListener();
+
         //Initialise Word Bank
         wordBank = new WordBank();
 
         //Check whether the game is timed or not
         isTimed = getIntent().getBooleanExtra("IS_TIMED", false);
+        wordLengthSelected = getIntent().getIntExtra("WORD_LENGTH", 0);
 
         //Start Game
         //Generate a random word from the word bank
@@ -112,6 +125,8 @@ public class MainActivity extends AppCompatActivity {
         et_inputtedLetter = (EditText) findViewById(R.id.ed_inputted_letter);
             et_inputtedLetter.setTypeface(typeface);
         iv_hangman = (ImageView) findViewById(R.id.iv_hangman);
+        //Nav Drawer
+        listView = (ListView) findViewById(R.id.listView);
     }
 
     /** Start the game **/
@@ -153,10 +168,15 @@ public class MainActivity extends AppCompatActivity {
     private String generateRandomWord(int sizeOfWordBank) {
         //Random number generator
         Random random = new Random();
-        int randomNumber = random.nextInt(sizeOfWordBank) + 1;
-
+        int randomNumber = random.nextInt(sizeOfWordBank);
         //Retrieve a word
         word = wordBank.getWord(randomNumber);
+        Log.v("z!", "" + word.length());
+        if (wordLengthSelected != 0) {
+            if (word.length() != wordLengthSelected){
+                generateRandomWord(sizeOfWordBank);
+            }
+        }
 
         return word;
     }
@@ -317,8 +337,10 @@ public class MainActivity extends AppCompatActivity {
 
     /** You Win **/
     private void youWin() {
-        //Stop the countdown timer if it's running
-        countDownTimer.cancel();
+        //Stop the count down timer if it's running
+        if (isTimerRunning) {
+            countDownTimer.cancel();
+        }
         //Set hangman image to half transparency
         iv_hangman.setAlpha(0.25f);
         //Set text to Win, Green, Font and Visible
@@ -336,6 +358,10 @@ public class MainActivity extends AppCompatActivity {
      * Set 'DEAD' text to visible
      */
     private void youLose() {
+        //Stop the count down timer if it's running
+        if (isTimerRunning) {
+            countDownTimer.cancel();
+        }
         //Set hangman image to half transparency
         iv_hangman.setAlpha(0.25f);
         //Set text to DEAD, Red, Font and visible
@@ -438,5 +464,44 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         countDownTimer.start();
+    }
+
+    /** Setup Navigation Drawer **/
+    private void addDrawerItemAnListener() {
+        String[] drawerItems = getResources().getStringArray(R.array.nav_gameType);
+        //Add a header
+        View header_gameType = getLayoutInflater().inflate(R.layout.header, null);
+        listView.addHeaderView(header_gameType);
+        //
+        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, drawerItems);
+        //Bind the adapter to the listView
+        listView.setAdapter(arrayAdapter);
+        //On item click
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                switch (position) {
+                    case 0 : isTimed = false;
+                        break;
+                    case 1 : isTimed = true;
+                        break;
+                    case 2 : wordLengthSelected = 1;
+                        break;
+                    case 3 : wordLengthSelected = 2;
+                        break;
+                    case 4 : wordLengthSelected = 3;
+                        break;
+                    case 5 : wordLengthSelected = 4;
+                        break;
+                    case 6 : wordLengthSelected = 5;
+                        break;
+                }
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                intent.putExtra("IS_TIMED", isTimed);
+                intent.putExtra("WORD_LENGTH", wordLengthSelected);
+                startActivity(intent);
+            }
+        });
     }
 }

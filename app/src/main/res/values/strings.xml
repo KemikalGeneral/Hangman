@@ -5,4 +5,24 @@
     <string name="btn_reset">Reset</string>
     <string name="et_hint">...pick a letter...</string>
     <string name="btn_go">Go</string>
+
+    <!--Nav Drawer Items-->
+    <array name="nav_gameType">
+        <item>Original Game</item>
+        <item>Timed Game</item>
+        <item>1 Letter Long</item>
+        <item>2 Letter Long</item>
+        <item>3 Letter Long</item>
+        <item>4 Letter Long</item>
+        <item>5 Letter Long</item>
+    </array>
+
+    <!--Navigation DialogBox Letter Count-->
+    <array name="nav_dialog_letter_count">
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </array>
 </resources>

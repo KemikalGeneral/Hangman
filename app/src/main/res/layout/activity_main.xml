@@ -1,101 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/page_container"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:background="@drawable/lined_paper_background"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/hangman_container"
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/page_container"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4">
+        android:layout_height="match_parent"
+        android:background="@drawable/lined_paper_background"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:context=".MainActivity">
 
-        <ImageView
-            android:id="@+id/iv_hangman"
+        <RelativeLayout
+            android:id="@+id/hangman_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/hangman_0" />
+            android:layout_height="0dp"
+            android:layout_weight="4">
+
+            <ImageView
+                android:id="@+id/iv_hangman"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/hangman_0" />
+
+            <TextView
+                android:id="@+id/tv_winLose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:letterSpacing=".25"
+                android:shadowColor="#000"
+                android:shadowDx="0"
+                android:shadowDy="4"
+                android:shadowRadius="20"
+                android:text="@string/tv_you_lose"
+                android:textAllCaps="true"
+                android:textColor="@color/red"
+                android:textSize="100sp"
+                android:visibility="invisible" />
+
+        </RelativeLayout>
 
         <TextView
-            android:id="@+id/tv_winLose"
+            android:id="@+id/tv_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:letterSpacing=".25"
-            android:shadowColor="#000"
-            android:shadowDx="0"
-            android:shadowDy="4"
-            android:shadowRadius="20"
-            android:text="@string/tv_you_lose"
-            android:textAllCaps="true"
-            android:textColor="@color/red"
-            android:textSize="100sp"
-            android:visibility="invisible" />
+            android:layout_gravity="center"
+            android:letterSpacing="0.25"
+            android:text="@string/tv_category"
+            android:textSize="56sp" />
 
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/tv_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/tv_category"
-        android:textSize="56sp"
-        android:letterSpacing="0.25"/>
-
-    <!--This is for the TextViews to be placed containing the letters already used-->
-    <LinearLayout
-        android:id="@+id/used_letters_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_weight="1"></LinearLayout>
-
-    <!--This is for the TextViews to be placed containing the letters of the random word-->
-    <LinearLayout
-        android:id="@+id/current_letters_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:gravity="center"
-        android:orientation="horizontal"></LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn_reset"
-            style="@style/button"
-            android:background="@drawable/button_style"
-            android:backgroundTint="@color/red"
-            android:text="@string/btn_reset" />
-
-        <EditText
-            android:id="@+id/ed_inputted_letter"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:inputType="text"
-            android:maxLength="1"
-            android:hint="@string/et_hint"
+        <!--This is for the TextViews to be placed containing the letters already used-->
+        <LinearLayout
+            android:id="@+id/used_letters_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:gravity="center"
-            android:textSize="24sp"
-            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"/>
+            android:orientation="horizontal"></LinearLayout>
 
-        <Button
-            android:id="@+id/btn_enter_letter"
-            style="@style/button"
-            android:background="@drawable/button_style"
-            android:backgroundTint="@color/green"
-            android:text="@string/btn_go" />
+        <!--This is for the TextViews to be placed containing the letters of the random word-->
+        <LinearLayout
+            android:id="@+id/current_letters_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:orientation="horizontal"></LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_reset"
+                style="@style/button"
+                android:background="@drawable/button_style"
+                android:backgroundTint="@color/red"
+                android:text="@string/btn_reset" />
+
+            <EditText
+                android:id="@+id/ed_inputted_letter"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                android:gravity="center"
+                android:hint="@string/et_hint"
+                android:inputType="text"
+                android:maxLength="1"
+                android:textSize="24sp" />
+
+            <Button
+                android:id="@+id/btn_enter_letter"
+                style="@style/button"
+                android:background="@drawable/button_style"
+                android:backgroundTint="@color/green"
+                android:text="@string/btn_go" />
+        </LinearLayout>
+
     </LinearLayout>
 
-</LinearLayout>
+    <!--Nav Drawer ListView-->
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="320dp"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:choiceMode="singleChoice"
+        android:layout_gravity="start"/>
+</android.support.v4.widget.DrawerLayout>
