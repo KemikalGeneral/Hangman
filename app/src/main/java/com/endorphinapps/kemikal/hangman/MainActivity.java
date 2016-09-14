@@ -2,14 +2,12 @@ package com.endorphinapps.kemikal.hangman;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -30,37 +28,37 @@ public class MainActivity extends AppCompatActivity {
 
     //Nav Drawer
     private DrawerLayout dl_drawerLayout;
-    private ListView listView_left;
-    private ListView listView_right;
     private ArrayAdapter<String> arrayAdapter_left;
     private ArrayAdapter<String> arrayAdapter_right;
     private ImageView iv_gameMenuIcon;
     private ImageView iv_settingsMenuIcon;
+    private ListView listView_left;
+    private ListView listView_right;
 
-    private LinearLayout ll_pageContainer;
-    private WordBank wordBank;
-    private TextView tv_category;
-    private LinearLayout currentLettersContainer;
-    private LinearLayout usedLettersContainer;
-    private List<String> usedLettersArray = new ArrayList<>();
-    private String word;
-    private List<String> letters;
-    private String currentLetter;
-    private Button btn_go;
-    private EditText et_inputtedLetter;
-    private Button btn_reset;
-    private TextView tv_splitWordLetters;
-    private ImageView iv_hangman;
-    private MediaPlayer mediaPlayer;
-    private int correctAnswerCounter;
-    private int wrongAnswerCounter;
-    private TextView tv_winLose;
-    private InputMethodManager inputMethodManager;
-    private Typeface typeface;
     private Boolean isTimed;
-    private CountDownTimer countDownTimer;
     private Boolean isTimerRunning;
+    private Button btn_go;
+    private Button btn_reset;
+    private CountDownTimer countDownTimer;
+    private EditText et_inputtedLetter;
+    private ImageView iv_hangman;
+    private InputMethodManager inputMethodManager;
+    private int correctAnswerCounter;
     private int wordLengthSelected;
+    private int wrongAnswerCounter;
+    private LinearLayout currentLettersContainer;
+    private LinearLayout ll_pageContainer;
+    private LinearLayout usedLettersContainer;
+    private List<String> letters;
+    private List<String> usedLettersArray = new ArrayList<>();
+    private MediaPlayer mediaPlayer;
+    private String currentLetter;
+    private String word;
+    private TextView tv_category;
+    private TextView tv_splitWordLetters;
+    private TextView tv_winLoseTimeBox;
+    private Typeface typeface;
+    private WordBank wordBank;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -80,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         wordBank = new WordBank();
 
         //Check whether the game is timed or not
+        //Check if a word length has been selected
         isTimed = getIntent().getBooleanExtra("IS_TIMED", false);
         wordLengthSelected = getIntent().getIntExtra("WORD_LENGTH", 0);
 
@@ -133,26 +132,26 @@ public class MainActivity extends AppCompatActivity {
 
     /** Find all views **/
     private void findViews() {
-        ll_pageContainer = (LinearLayout) findViewById(R.id.page_container);
-        currentLettersContainer = (LinearLayout) findViewById(R.id.current_letters_container);
-        usedLettersContainer = (LinearLayout) findViewById(R.id.used_letters_container);
-        tv_category = (TextView) findViewById(R.id.tv_category);
-            tv_category.setTypeface(typeface);
-        tv_winLose = (TextView) findViewById(R.id.tv_winLose);
-            tv_winLose.setTypeface(typeface);
+        btn_go = (Button) findViewById(R.id.btn_go);
+                btn_go.setTypeface(typeface);/////////
         btn_reset = (Button) findViewById(R.id.btn_reset);
-            btn_reset.setTypeface(typeface);
-        btn_go = (Button) findViewById(R.id.btn_enter_letter);
-            btn_go.setTypeface(typeface);
+                btn_reset.setTypeface(typeface);////////////
+        currentLettersContainer = (LinearLayout) findViewById(R.id.current_letters_container);
         et_inputtedLetter = (EditText) findViewById(R.id.ed_inputted_letter);
-            et_inputtedLetter.setTypeface(typeface);
+                et_inputtedLetter.setTypeface(typeface);/////////////////////////
         iv_hangman = (ImageView) findViewById(R.id.iv_hangman);
+        ll_pageContainer = (LinearLayout) findViewById(R.id.page_container);
+        tv_category = (TextView) findViewById(R.id.tv_category);
+                tv_category.setTypeface(typeface);///////////////////
+        tv_winLoseTimeBox = (TextView) findViewById(R.id.tv_winLoseTimeBox);
+                tv_winLoseTimeBox.setTypeface(typeface);///////////////////////////
+        usedLettersContainer = (LinearLayout) findViewById(R.id.used_letters_container);
         //Nav Drawer
-        listView_left = (ListView) findViewById(R.id.listView_left);
-        listView_right = (ListView) findViewById(R.id.listView_right);
         dl_drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         iv_gameMenuIcon = (ImageView) findViewById(R.id.icon_game_menu);
         iv_settingsMenuIcon = (ImageView) findViewById(R.id.icon_settings_menu);
+        listView_left = (ListView) findViewById(R.id.listView_left);
+        listView_right = (ListView) findViewById(R.id.listView_right);
 
     }
 
@@ -169,7 +168,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Get random word from Word Bank
         word = generateRandomWord(sizeOfWordBank);
-//        tv_category.setText(word); //Just for testing
 
         //Split word into an array of characters
         letters = splitWordIntoAnArrayOfLetters(word);
@@ -178,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
         //add them to the existing LinearLayout
         createViewsForLetters(letters);
 
+        //Enable keyboard in case it's set to hidden
         et_inputtedLetter.setShowSoftInputOnFocus(true);
 
         //If it is a TIMED game, start timer, if not, set running to false
@@ -193,13 +192,14 @@ public class MainActivity extends AppCompatActivity {
      * @return
      */
     private String generateRandomWord(int sizeOfWordBank) {
-        //Random number generator
+        //Generate a random number between 1 and the size of the word bank
         Random random = new Random();
         int randomNumber = random.nextInt(sizeOfWordBank);
-        //Retrieve a word
+        //Retrieve a word based on the position of the random number
         word = wordBank.getWord(randomNumber);
-        Log.v("z!", "" + word.length());
+        //Check if the word length is 0 (default for no length selected)
         if (wordLengthSelected != 0) {
+            //Keep looking for a word that is the selected length
             if (word.length() != wordLengthSelected){
                 generateRandomWord(sizeOfWordBank);
             }
@@ -232,12 +232,12 @@ public class MainActivity extends AppCompatActivity {
         for (String letter : letters) {
             //Create a new TextView
             tv_splitWordLetters = new TextView(this);
-            //Set TAG to the same value as the letter it contains
+            //Set a TAG to the same value as the letter it contains
             tv_splitWordLetters.setTag(letter);
             //Styling
             tv_splitWordLetters.setText(letter);
             tv_splitWordLetters.setTextSize(56);
-            tv_splitWordLetters.setTextColor(Color.parseColor("#00000000"));
+            tv_splitWordLetters.setTextColor(getResources().getColor(R.color.transparent));
             tv_splitWordLetters.setAllCaps(true);
             tv_splitWordLetters.setLetterSpacing(0.25f);
             tv_splitWordLetters.setBackgroundResource(R.drawable.box_outline);
@@ -291,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
                 mediaPlayer.start();
                 //Make the letter visible;
                 TextView tv = (TextView) view;
-                tv.setTextColor(Color.BLACK);
+                tv.setTextColor(getResources().getColor(R.color.black));
                 tv.setTypeface(typeface);
                 //If all the letters have been shown
                 if (correctAnswerCounter == letters.size()) {
@@ -342,9 +342,7 @@ public class MainActivity extends AppCompatActivity {
     private void resetGame() {
         clearAndHideKeyboard();
         //Stop the count down timer if it's running
-        if (isTimerRunning) {
-            countDownTimer.cancel();
-        }
+        stopTimer();
         //Clear both counters
         correctAnswerCounter = 0;
         wrongAnswerCounter = 0;
@@ -352,7 +350,7 @@ public class MainActivity extends AppCompatActivity {
         usedLettersContainer.removeAllViews();
         usedLettersArray.clear();
         //Clear text
-        tv_winLose.setText("");
+        tv_winLoseTimeBox.setText("");
         //Reset hangman image
         iv_hangman.setImageResource(R.drawable.hangman_0);
         iv_hangman.setAlpha(1.0f);
@@ -365,16 +363,14 @@ public class MainActivity extends AppCompatActivity {
     /** You Win **/
     private void youWin() {
         //Stop the count down timer if it's running
-        if (isTimerRunning) {
-            countDownTimer.cancel();
-        }
+        stopTimer();
         //Set hangman image to half transparency
         iv_hangman.setAlpha(0.25f);
         //Set text to Win, Green, Font and Visible
-        tv_winLose.setText("WIN");
-        tv_winLose.setTextColor(Color.GREEN);
-        tv_winLose.setTypeface(typeface);
-        tv_winLose.setVisibility(View.VISIBLE);
+        tv_winLoseTimeBox.setText(getResources().getString(R.string.tv_you_win));
+        tv_winLoseTimeBox.setTextColor(getResources().getColor(R.color.green));
+        tv_winLoseTimeBox.setTypeface(typeface);
+        tv_winLoseTimeBox.setVisibility(View.VISIBLE);
         //Disable the keyboard from further entries
         et_inputtedLetter.setShowSoftInputOnFocus(false);
     }
@@ -386,16 +382,14 @@ public class MainActivity extends AppCompatActivity {
      */
     private void youLose() {
         //Stop the count down timer if it's running
-        if (isTimerRunning) {
-            countDownTimer.cancel();
-        }
+        stopTimer();
         //Set hangman image to half transparency
         iv_hangman.setAlpha(0.25f);
         //Set text to DEAD, Red, Font and visible
-        tv_winLose.setText("DEAD");
-        tv_winLose.setTextColor(Color.RED);
-        tv_winLose.setTypeface(typeface);
-        tv_winLose.setVisibility(View.VISIBLE);
+        tv_winLoseTimeBox.setText(getResources().getString(R.string.tv_you_lose));
+        tv_winLoseTimeBox.setTextColor(getResources().getColor(R.color.red));
+        tv_winLoseTimeBox.setTypeface(typeface);
+        tv_winLoseTimeBox.setVisibility(View.VISIBLE);
         //Disable the keyboard from further entries
         et_inputtedLetter.setShowSoftInputOnFocus(false);
     }
@@ -419,9 +413,9 @@ public class MainActivity extends AppCompatActivity {
         //If the container is empty, add a label
         if (usedLettersContainer.getChildCount() == 0) {
             TextView tv_label = new TextView(this);
-            tv_label.setText("Used letters: ");
+            tv_label.setText(getResources().getString(R.string.tv_used_letter_label));
             tv_label.setTextSize(24);
-            tv_label.setTextColor(Color.GRAY);
+            tv_label.setTextColor(getResources().getColor(R.color.grey));
             tv_label.setTypeface(typeface);
             usedLettersContainer.addView(tv_label);
         }
@@ -429,7 +423,7 @@ public class MainActivity extends AppCompatActivity {
         TextView tv_usedLetter = new TextView(this);
         tv_usedLetter.setText(currentLetter);
         tv_usedLetter.setTextSize(32);
-        tv_usedLetter.setTextColor(Color.RED);
+        tv_usedLetter.setTextColor(getResources().getColor(R.color.red));
         tv_usedLetter.setAllCaps(true);
         tv_usedLetter.setLetterSpacing(0.25f);
         tv_usedLetter.setTypeface(typeface);
@@ -445,18 +439,16 @@ public class MainActivity extends AppCompatActivity {
         //Set length of time for countdown 3-2-1
         long time = 3000;
 
+        //Start timer at 3 seconds, displaying the numbers on screen, set colour
         CountDownTimer introTimer = new CountDownTimer(time, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                Log.v("z!", "Countdown" + millisUntilFinished);
-                tv_winLose.setText("" + millisUntilFinished / 1000);
-                tv_winLose.setTextColor(getResources().getColor(R.color.pink));
-                tv_winLose.setVisibility(View.VISIBLE);
+                tv_winLoseTimeBox.setText(String.valueOf(millisUntilFinished / 1000));
+                tv_winLoseTimeBox.setTextColor(getResources().getColor(R.color.pink));
+                tv_winLoseTimeBox.setVisibility(View.VISIBLE);
             }
-
             @Override
             public void onFinish() {
-                Log.v("z!", "Finshed");
                 countDownTimer();
             }
         };
@@ -471,21 +463,20 @@ public class MainActivity extends AppCompatActivity {
     private void countDownTimer() {
         //Get number of letters in the split current word array
         int numberOfLettersInArray = letters.size();
-        //Set length of time for countdown, 5seconds per letter
+        //Set length of time for countdown, 5 seconds per letter
+        //Set time to show on screen
+        //Set colour
         long time = numberOfLettersInArray * 5000;
         countDownTimer = new CountDownTimer(time, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                Log.v("z!", "Counting Down" + millisUntilFinished);
                 isTimerRunning = true;
-                tv_winLose.setText("" + millisUntilFinished / 1000);
-                tv_winLose.setTextColor(getResources().getColor(R.color.pink));
-                tv_winLose.setVisibility(View.VISIBLE);
+                tv_winLoseTimeBox.setText(String.valueOf(millisUntilFinished / 1000));
+                tv_winLoseTimeBox.setTextColor(getResources().getColor(R.color.pink));
+                tv_winLoseTimeBox.setVisibility(View.VISIBLE);
             }
-
             @Override
             public void onFinish() {
-                Log.v("z!", "Finshed");
                 isTimerRunning = false;
                 youLose();
             }
@@ -495,12 +486,15 @@ public class MainActivity extends AppCompatActivity {
 
     /** Setup Navigation Drawer **/
     private void addDrawerItemAnListener() {
+        /**LEFT drawer **/
+        //Get strings to populate the list
         String[] drawerItems = getResources().getStringArray(R.array.nav_gameType);
-        //Add a header
+        //Add a header, set text and colour
         View header_gameType = getLayoutInflater().inflate(R.layout.list_item_header, null);
         TextView tv = (TextView) header_gameType.findViewById(R.id.list_item_header);
-        tv.setText("Pick a Game");
+        tv.setText(getResources().getString(R.string.tv_nav_drawer_left_header));
         tv.setTextColor(getResources().getColor(R.color.pink));
+        //Add header to list
         listView_left.addHeaderView(header_gameType);
         //Set the adapter to the layout and array
         arrayAdapter_left = new ArrayAdapter<>(this, R.layout.list_item, drawerItems);
@@ -533,13 +527,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        /** RIGHT drawer **/
+        //Get strings to populate the list
         String[] drawerItems_right = getResources().getStringArray(R.array.nav_settings);
-        //Add a header
+        //Add a header, set text and colour
         View header_settings = getLayoutInflater().inflate(R.layout.list_item_header, null);
         TextView tv2 = (TextView) header_settings.findViewById(R.id.list_item_header);
-        tv2.setText("Settings");
+        tv2.setText(getResources().getString(R.string.tv_nav_drawer_right_header));
         tv2.setTextColor(getResources().getColor(R.color.teal));
+        //Add header to list
         listView_right.addHeaderView(header_settings);
         //Set the adapter to the layout and array
          arrayAdapter_right = new ArrayAdapter<>(this, R.layout.list_item, drawerItems_right);
@@ -551,19 +547,13 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 switch (position) {
-                    case 1 : isTimed = false;
+                    case 1 : //TODO add reset button
                         break;
-                    case 2 : isTimed = true;
+                    case 2 : //TODO add music on/off toggle
                         break;
-                    case 3 : wordLengthSelected = 3;
+                    case 3 : //TODO add sound FX on/off toggle
                         break;
-                    case 4 : wordLengthSelected = 4;
-                        break;
-                    case 5 : wordLengthSelected = 5;
-                        break;
-                    case 6 : wordLengthSelected = 6;
-                        break;
-                    case 7 : wordLengthSelected = 7;
+                    case 4 : //TODO add 'about'
                         break;
                 }
                 Intent intent = new Intent(MainActivity.this, MainActivity.class);
@@ -572,5 +562,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    /** Stop count down timer if it's running  **/
+    private void stopTimer() {
+        //Stop the count down timer if it's running
+        if (isTimerRunning) {
+            countDownTimer.cancel();
+        }
     }
 }

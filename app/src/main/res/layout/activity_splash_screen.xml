@@ -5,19 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/lined_paper_background"
     tools:context="com.endorphinapps.kemikal.hangman.SplashScreen">
 
     <TextView
+        android:id="@+id/splash_screen_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:shadowColor="#000"
+        android:shadowColor="@color/black"
         android:shadowDx="0"
         android:shadowDy="2"
         android:shadowRadius="24"
-        android:text="HANGMAN"
-        android:textColor="@color/red"
-        android:textSize="64sp" />
+        android:text="@string/hangman_title"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_large"
+        android:letterSpacing="0.25"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -29,20 +32,20 @@
 
     <Button
         android:id="@+id/original_game"
-        style="@style/btn_splashscreen"
+        style="@style/btn_splash_screen"
         android:background="@color/pink"
-        android:text="Original" />
+        android:text="@string/btn_splash_screen_original" />
 
     <Button
         android:id="@+id/timed_game"
-        style="@style/btn_splashscreen"
+        style="@style/btn_splash_screen"
         android:background="@color/teal"
-        android:text="Timed" />
+        android:text="@string/btn_splash_screen_timed" />
 
     <Button
         android:id="@+id/word_length"
-        style="@style/btn_splashscreen"
+        style="@style/btn_splash_screen"
         android:background="@color/amber"
-        android:text="Word by Length" />
+        android:text="@string/btn_splash_screen_word_by_length" />
 
 </LinearLayout>

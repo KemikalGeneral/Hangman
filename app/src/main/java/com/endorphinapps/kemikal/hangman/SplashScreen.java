@@ -3,14 +3,17 @@ package com.endorphinapps.kemikal.hangman;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class SplashScreen extends AppCompatActivity {
 
+    private TextView tv_splashScreenTitle;
     private Button btn_originalGame;
     private Button btn_timedGame;
     private Button btn_wordLength;
@@ -23,6 +26,10 @@ public class SplashScreen extends AppCompatActivity {
 
         //Find all views
         findViews();
+
+        //Set Font for Views containing text
+        final Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/crayon_font.ttf");
+        setFonts(typeface);
 
         //Start original game
         btn_originalGame.setOnClickListener(new View.OnClickListener() {
@@ -57,9 +64,20 @@ public class SplashScreen extends AppCompatActivity {
 
     /** Find all Views **/
     private void findViews() {
+        tv_splashScreenTitle = (TextView) findViewById(R.id.splash_screen_title);
         btn_originalGame = (Button) findViewById(R.id.original_game);
         btn_timedGame = (Button) findViewById(R.id.timed_game);
         btn_wordLength = (Button) findViewById(R.id.word_length);
+    }
+
+    /** Apply fonts to all views containing text **/
+    /** @param typeface
+     */
+    private void setFonts(Typeface typeface) {
+        tv_splashScreenTitle.setTypeface(typeface);
+        btn_originalGame.setTypeface(typeface);
+        btn_timedGame.setTypeface(typeface);
+        btn_wordLength.setTypeface(typeface);
     }
 
     /** Show Dialogue box to select a number **/

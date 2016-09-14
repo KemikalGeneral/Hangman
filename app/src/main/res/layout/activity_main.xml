@@ -14,7 +14,7 @@
         tools:context=".MainActivity">
 
         <RelativeLayout
-            android:id="@+id/hangman_container"
+            android:id="@+id/hangman_image_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="4">
@@ -22,47 +22,44 @@
             <!--Icon for left menu-->
             <ImageView
                 android:id="@+id/icon_game_menu"
-                android:layout_width="48dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
+                style="@style/icon_nav_drawer"
                 android:layout_alignParentStart="true"
-                android:src="@drawable/icon_game_menu"
-                android:adjustViewBounds="true"/>
+                android:src="@drawable/icon_game_menu" />
 
             <!--Icon for right menu-->
             <ImageView
                 android:id="@+id/icon_settings_menu"
-                android:layout_width="48dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
+                style="@style/icon_nav_drawer"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/icon_settings_menu"
-                android:adjustViewBounds="true"/>
+                android:src="@drawable/icon_settings_menu" />
 
+            <!--Hangman Image-->
             <ImageView
                 android:id="@+id/iv_hangman"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/hangman_0" />
 
+            <!--Win Lose Time box, shows either 'win', 'lose' or the time remaining-->
             <TextView
-                android:id="@+id/tv_winLose"
+                android:id="@+id/tv_winLoseTimeBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:letterSpacing=".25"
-                android:shadowColor="#000"
+                android:shadowColor="@color/black"
                 android:shadowDx="0"
                 android:shadowDy="4"
                 android:shadowRadius="20"
                 android:text="@string/tv_you_lose"
                 android:textAllCaps="true"
                 android:textColor="@color/red"
-                android:textSize="100sp"
+                android:textSize="@dimen/text_size_Xlarge"
                 android:visibility="invisible" />
 
         </RelativeLayout>
 
+        <!--Will show the category of the word-->
         <TextView
             android:id="@+id/tv_category"
             android:layout_width="wrap_content"
@@ -70,38 +67,34 @@
             android:layout_gravity="center"
             android:letterSpacing="0.25"
             android:text="@string/tv_category"
-            android:textSize="56sp" />
+            android:textSize="@dimen/text_size_large" />
 
         <!--This is for the TextViews to be placed containing the letters already used-->
         <LinearLayout
             android:id="@+id/used_letters_container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal"></LinearLayout>
+            style="@style/letter_container"
+            android:layout_weight="1"></LinearLayout>
 
         <!--This is for the TextViews to be placed containing the letters of the random word-->
         <LinearLayout
             android:id="@+id/current_letters_container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:orientation="horizontal"></LinearLayout>
+            style="@style/letter_container"
+            android:layout_weight="2"></LinearLayout>
 
+        <!--This will act as a container for the EditText and Buttons-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <!--Reset Button - Generates new word-->
             <Button
                 android:id="@+id/btn_reset"
-                style="@style/button"
-                android:background="@drawable/button_style"
+                style="@style/btn_main_activity"
                 android:backgroundTint="@color/red"
                 android:text="@string/btn_reset" />
 
+            <!--Input a letter for verification-->
             <EditText
                 android:id="@+id/ed_inputted_letter"
                 android:layout_width="0dp"
@@ -112,12 +105,12 @@
                 android:hint="@string/et_hint"
                 android:inputType="text"
                 android:maxLength="1"
-                android:textSize="24sp" />
+                android:textSize="@dimen/text_size_normal" />
 
+            <!--Go button - Action user input-->
             <Button
-                android:id="@+id/btn_enter_letter"
-                style="@style/button"
-                android:background="@drawable/button_style"
+                android:id="@+id/btn_go"
+                style="@style/btn_main_activity"
                 android:backgroundTint="@color/green"
                 android:text="@string/btn_go" />
         </LinearLayout>
@@ -127,18 +120,12 @@
     <!--LEFT Nav Drawer ListView-->
     <ListView
         android:id="@+id/listView_left"
-        android:layout_width="300dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@drawable/lined_paper_background"
-        android:choiceMode="singleChoice" />
+        style="@style/nav_listViews"
+        android:layout_gravity="start" />
 
     <!--RIGHT Nav Drawer ListView-->
     <ListView
         android:id="@+id/listView_right"
-        android:layout_width="300dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:background="@drawable/lined_paper_background"
-        android:choiceMode="singleChoice" />
+        style="@style/nav_listViews"
+        android:layout_gravity="end" />
 </android.support.v4.widget.DrawerLayout>

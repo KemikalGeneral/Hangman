@@ -38,13 +38,13 @@
 
             <Button
                 android:id="@+id/original_game"
-                style="@style/btn_splashscreen"
+                style="@style/btn_splash_screen"
                 android:text="Original"
                 android:background="@color/pink"/>
 
             <Button
                 android:id="@+id/timed_game"
-                style="@style/btn_splashscreen"
+                style="@style/btn_splash_screen"
                 android:text="Timed"
                 android:background="@color/teal"/>
         </LinearLayout>

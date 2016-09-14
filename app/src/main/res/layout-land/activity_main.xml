@@ -10,7 +10,7 @@
     tools:context=".MainActivity">
 
     <RelativeLayout
-        android:id="@+id/hangman_container"
+        android:id="@+id/hangman_image_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1">
@@ -22,7 +22,7 @@
             android:src="@drawable/hangman_0" />
 
         <TextView
-            android:id="@+id/tv_winLose"
+            android:id="@+id/tv_winLoseTimeBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -80,7 +80,7 @@
 
             <Button
                 android:id="@+id/btn_reset"
-                style="@style/button"
+                style="@style/btn_main_activity"
                 android:background="@drawable/button_style"
                 android:backgroundTint="@color/red"
                 android:text="@string/btn_reset" />
@@ -98,8 +98,8 @@
                 android:textSize="24sp" />
 
             <Button
-                android:id="@+id/btn_enter_letter"
-                style="@style/button"
+                android:id="@+id/btn_go"
+                style="@style/btn_main_activity"
                 android:background="@drawable/button_style"
                 android:backgroundTint="@color/green"
                 android:text="@string/btn_go" />

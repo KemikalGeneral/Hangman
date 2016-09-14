@@ -8,28 +8,47 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <!--Buttons ons the splashscreen-->
-    <style name="btn_splashscreen">
+    <!--Buttons on the splash screen-->
+    <style name="btn_splash_screen">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
-        <item name="android:layout_weight">1</item>
+        <item name="android:layout_weight">0.5</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/text_size_normal</item>
+        <item name="android:letterSpacing">0.25</item>
     </style>
 
-    <!--Buttons for word length selector-->
-    <style name="btn_splashscreen_word_length">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:background">@color/amber</item>
-    </style>
-
-
-    <style name="button">
+    <!--Buttons in the MainActivity-->
+    <style name="btn_main_activity">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:letterSpacing">0.25</item>
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">@dimen/text_size_normal</item>
+        <item name="android:background">@drawable/button_style</item>
     </style>
 
+    <!--Icons for the slide out menus-->
+    <style name="icon_nav_drawer">
+        <item name="android:layout_width">@dimen/icon_width_height</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:adjustViewBounds">true</item>
+    </style>
+
+    <!--LinearLayouts act as containers for the correct letters and the used letters-->
+    <style name="letter_container">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <!--ListViews for the left and right drawers-->
+    <style name="nav_listViews">
+        <item name="android:layout_width">300dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@drawable/lined_paper_background</item>
+        <item name="android:choiceMode">singleChoice</item>
+    </style>
 </resources>
