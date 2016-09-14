@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -28,8 +29,13 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
 
     //Nav Drawer
-    private ListView listView;
-    private ArrayAdapter<String> arrayAdapter;
+    private DrawerLayout dl_drawerLayout;
+    private ListView listView_left;
+    private ListView listView_right;
+    private ArrayAdapter<String> arrayAdapter_left;
+    private ArrayAdapter<String> arrayAdapter_right;
+    private ImageView iv_gameMenuIcon;
+    private ImageView iv_settingsMenuIcon;
 
     private LinearLayout ll_pageContainer;
     private WordBank wordBank;
@@ -107,6 +113,22 @@ public class MainActivity extends AppCompatActivity {
                 clearAndHideKeyboard();
             }
         });
+
+        //Open the Game Menu
+        iv_gameMenuIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dl_drawerLayout.openDrawer(listView_left);
+            }
+        });
+
+        //Open the Settings Menu
+        iv_settingsMenuIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dl_drawerLayout.openDrawer(listView_right);
+            }
+        });
     }
 
     /** Find all views **/
@@ -126,7 +148,12 @@ public class MainActivity extends AppCompatActivity {
             et_inputtedLetter.setTypeface(typeface);
         iv_hangman = (ImageView) findViewById(R.id.iv_hangman);
         //Nav Drawer
-        listView = (ListView) findViewById(R.id.listView);
+        listView_left = (ListView) findViewById(R.id.listView_left);
+        listView_right = (ListView) findViewById(R.id.listView_right);
+        dl_drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        iv_gameMenuIcon = (ImageView) findViewById(R.id.icon_game_menu);
+        iv_settingsMenuIcon = (ImageView) findViewById(R.id.icon_settings_menu);
+
     }
 
     /** Start the game **/
@@ -470,31 +497,73 @@ public class MainActivity extends AppCompatActivity {
     private void addDrawerItemAnListener() {
         String[] drawerItems = getResources().getStringArray(R.array.nav_gameType);
         //Add a header
-        View header_gameType = getLayoutInflater().inflate(R.layout.header, null);
-        listView.addHeaderView(header_gameType);
-        //
-        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, drawerItems);
+        View header_gameType = getLayoutInflater().inflate(R.layout.list_item_header, null);
+        TextView tv = (TextView) header_gameType.findViewById(R.id.list_item_header);
+        tv.setText("Pick a Game");
+        tv.setTextColor(getResources().getColor(R.color.pink));
+        listView_left.addHeaderView(header_gameType);
+        //Set the adapter to the layout and array
+        arrayAdapter_left = new ArrayAdapter<>(this, R.layout.list_item, drawerItems);
         //Bind the adapter to the listView
-        listView.setAdapter(arrayAdapter);
+        listView_left.setAdapter(arrayAdapter_left);
         //On item click
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView_left.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 switch (position) {
-                    case 0 : isTimed = false;
+                    case 1 : isTimed = false;
                         break;
-                    case 1 : isTimed = true;
+                    case 2 : isTimed = true;
                         break;
-                    case 2 : wordLengthSelected = 1;
+                    case 3 : wordLengthSelected = 3;
                         break;
-                    case 3 : wordLengthSelected = 2;
+                    case 4 : wordLengthSelected = 4;
                         break;
-                    case 4 : wordLengthSelected = 3;
+                    case 5 : wordLengthSelected = 5;
                         break;
-                    case 5 : wordLengthSelected = 4;
+                    case 6 : wordLengthSelected = 6;
                         break;
-                    case 6 : wordLengthSelected = 5;
+                    case 7 : wordLengthSelected = 7;
+                        break;
+                }
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                intent.putExtra("IS_TIMED", isTimed);
+                intent.putExtra("WORD_LENGTH", wordLengthSelected);
+                startActivity(intent);
+            }
+        });
+
+        String[] drawerItems_right = getResources().getStringArray(R.array.nav_settings);
+        //Add a header
+        View header_settings = getLayoutInflater().inflate(R.layout.list_item_header, null);
+        TextView tv2 = (TextView) header_settings.findViewById(R.id.list_item_header);
+        tv2.setText("Settings");
+        tv2.setTextColor(getResources().getColor(R.color.teal));
+        listView_right.addHeaderView(header_settings);
+        //Set the adapter to the layout and array
+         arrayAdapter_right = new ArrayAdapter<>(this, R.layout.list_item, drawerItems_right);
+        //Bind the adapter to the listView
+        listView_right.setAdapter(arrayAdapter_right);
+        //On item click
+        listView_right.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                switch (position) {
+                    case 1 : isTimed = false;
+                        break;
+                    case 2 : isTimed = true;
+                        break;
+                    case 3 : wordLengthSelected = 3;
+                        break;
+                    case 4 : wordLengthSelected = 4;
+                        break;
+                    case 5 : wordLengthSelected = 5;
+                        break;
+                    case 6 : wordLengthSelected = 6;
+                        break;
+                    case 7 : wordLengthSelected = 7;
                         break;
                 }
                 Intent intent = new Intent(MainActivity.this, MainActivity.class);

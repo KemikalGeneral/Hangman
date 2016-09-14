@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/drawer_layout">
 
     <LinearLayout xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/page_container"
@@ -17,6 +18,26 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="4">
+
+            <!--Icon for left menu-->
+            <ImageView
+                android:id="@+id/icon_game_menu"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/icon_game_menu"
+                android:adjustViewBounds="true"/>
+
+            <!--Icon for right menu-->
+            <ImageView
+                android:id="@+id/icon_settings_menu"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/icon_settings_menu"
+                android:adjustViewBounds="true"/>
 
             <ImageView
                 android:id="@+id/iv_hangman"
@@ -103,12 +124,21 @@
 
     </LinearLayout>
 
-    <!--Nav Drawer ListView-->
+    <!--LEFT Nav Drawer ListView-->
     <ListView
-        android:id="@+id/listView"
-        android:layout_width="320dp"
+        android:id="@+id/listView_left"
+        android:layout_width="300dp"
         android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:choiceMode="singleChoice"
-        android:layout_gravity="start"/>
+        android:layout_gravity="start"
+        android:background="@drawable/lined_paper_background"
+        android:choiceMode="singleChoice" />
+
+    <!--RIGHT Nav Drawer ListView-->
+    <ListView
+        android:id="@+id/listView_right"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:background="@drawable/lined_paper_background"
+        android:choiceMode="singleChoice" />
 </android.support.v4.widget.DrawerLayout>
