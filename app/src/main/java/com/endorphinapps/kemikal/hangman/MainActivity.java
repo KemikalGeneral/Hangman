@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Get random word from Word Bank
         word = generateRandomWord(sizeOfWordBank);
+//        word = "ab"; //For testing purposes
 
         //Split word into an array of characters
         letters = splitWordIntoAnArrayOfLetters(word);
@@ -318,6 +319,7 @@ public class MainActivity extends AppCompatActivity {
             case 1: resources = R.drawable.hangman_1;
                 break;
             case 2: resources = R.drawable.hangman_2;
+//                youLose();//For testing purposes
                 break;
             case 3: resources = R.drawable.hangman_3;
                 break;
@@ -392,6 +394,17 @@ public class MainActivity extends AppCompatActivity {
         tv_winLoseTimeBox.setVisibility(View.VISIBLE);
         //Disable the keyboard from further entries
         et_inputtedLetter.setShowSoftInputOnFocus(false);
+        //Loop through the current letters
+        for (int i = 0; i < currentLettersContainer.getChildCount(); i++) {
+            View view = currentLettersContainer.getChildAt(i);
+            //Create a TextView for each letter
+            TextView textView = (TextView) view;
+            //Make any hidden letters visible
+            if (textView.getCurrentTextColor() == getResources().getColor(R.color.transparent)){
+                //Set the colour to make it visible
+                textView.setTextColor(getResources().getColor(R.color.red));
+            }
+        }
     }
 
     /** Clear and hide the keyboard **/
