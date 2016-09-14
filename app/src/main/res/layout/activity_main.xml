@@ -87,13 +87,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <!--Reset Button - Generates new word-->
-            <Button
-                android:id="@+id/btn_reset"
-                style="@style/btn_main_activity"
-                android:backgroundTint="@color/red"
-                android:text="@string/btn_reset" />
-
             <!--Input a letter for verification-->
             <EditText
                 android:id="@+id/ed_inputted_letter"
@@ -111,7 +104,7 @@
             <Button
                 android:id="@+id/btn_go"
                 style="@style/btn_main_activity"
-                android:backgroundTint="@color/green"
+                android:backgroundTint="#964cae50"
                 android:text="@string/btn_go" />
         </LinearLayout>
 

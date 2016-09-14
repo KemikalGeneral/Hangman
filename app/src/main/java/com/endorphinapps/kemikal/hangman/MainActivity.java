@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private Boolean isTimed;
     private Boolean isTimerRunning;
     private Button btn_go;
-    private Button btn_reset;
     private CountDownTimer countDownTimer;
     private EditText et_inputtedLetter;
     private ImageView iv_hangman;
@@ -97,14 +96,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Reset the game on RESET button click
-        btn_reset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resetGame();
-            }
-        });
-
         //Clear and hide the keyboard when focus is lost
         ll_pageContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,8 +125,6 @@ public class MainActivity extends AppCompatActivity {
     private void findViews() {
         btn_go = (Button) findViewById(R.id.btn_go);
                 btn_go.setTypeface(typeface);/////////
-        btn_reset = (Button) findViewById(R.id.btn_reset);
-                btn_reset.setTypeface(typeface);////////////
         currentLettersContainer = (LinearLayout) findViewById(R.id.current_letters_container);
         et_inputtedLetter = (EditText) findViewById(R.id.ed_inputted_letter);
                 et_inputtedLetter.setTypeface(typeface);/////////////////////////
@@ -499,7 +488,8 @@ public class MainActivity extends AppCompatActivity {
 
     /** Setup Navigation Drawer **/
     private void addDrawerItemAnListener() {
-        /**LEFT drawer **/
+        /**LEFT drawer **/  /**LEFT drawer **/  /**LEFT drawer **/  /**LEFT drawer **/
+        /**LEFT drawer **/  /**LEFT drawer **/  /**LEFT drawer **/  /**LEFT drawer **/
         //Get strings to populate the list
         String[] drawerItems = getResources().getStringArray(R.array.nav_gameType);
         //Add a header, set text and colour
@@ -540,7 +530,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        /** RIGHT drawer **/
+        /** RIGHT drawer **/    /** RIGHT drawer **/    /** RIGHT drawer **/    /** RIGHT drawer **/
+        /** RIGHT drawer **/    /** RIGHT drawer **/    /** RIGHT drawer **/    /** RIGHT drawer **/
         //Get strings to populate the list
         String[] drawerItems_right = getResources().getStringArray(R.array.nav_settings);
         //Add a header, set text and colour
@@ -548,6 +539,7 @@ public class MainActivity extends AppCompatActivity {
         TextView tv2 = (TextView) header_settings.findViewById(R.id.list_item_header);
         tv2.setText(getResources().getString(R.string.tv_nav_drawer_right_header));
         tv2.setTextColor(getResources().getColor(R.color.teal));
+        tv2.setTypeface(typeface);
         //Add header to list
         listView_right.addHeaderView(header_settings);
         //Set the adapter to the layout and array
@@ -561,6 +553,7 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (position) {
                     case 1 : //TODO add reset button
+                        resetGame();
                         break;
                     case 2 : //TODO add music on/off toggle
                         break;
