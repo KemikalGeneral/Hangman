@@ -8,7 +8,7 @@
         android:id="@+id/page_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/lined_paper_background"
+        android:background="@drawable/paper_background_normal"
         android:gravity="center"
         android:orientation="vertical"
         tools:context=".MainActivity">
@@ -98,7 +98,7 @@
                 android:hint="@string/et_hint"
                 android:inputType="text"
                 android:maxLength="1"
-                android:textSize="@dimen/text_size_normal" />
+                android:textSize="@dimen/text_size_normal"/>
 
             <!--Go button - Action user input-->
             <Button

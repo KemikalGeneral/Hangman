@@ -9,7 +9,7 @@
         android:id="@+id/page_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/lined_paper_background"
+        android:background="@drawable/paper_background_normal"
         android:gravity="center"
         android:orientation="horizontal"
         tools:context=".MainActivity">
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <!--Icon for left menu                                                                                                         -->
+            <!--Icon for left menu -->
             <ImageView
                 android:id="@+id/icon_game_menu"
                 style="@style/icon_nav_drawer"

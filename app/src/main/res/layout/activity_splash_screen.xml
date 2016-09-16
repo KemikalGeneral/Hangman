@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/lined_paper_background"
+    android:background="@drawable/paper_background_normal"
     tools:context="com.endorphinapps.kemikal.hangman.SplashScreen">
 
     <TextView
@@ -47,5 +47,11 @@
         style="@style/btn_splash_screen"
         android:background="@color/amber"
         android:text="@string/btn_splash_screen_word_by_length" />
+
+    <Button
+        android:id="@+id/word_category"
+        style="@style/btn_splash_screen"
+        android:background="@color/blue"
+        android:text="@string/btn_splash_screen_word_by_category" />
 
 </LinearLayout>

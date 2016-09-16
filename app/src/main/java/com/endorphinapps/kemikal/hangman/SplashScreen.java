@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,11 +14,30 @@ import android.widget.TextView;
 
 public class SplashScreen extends AppCompatActivity {
 
-    private TextView tv_splashScreenTitle;
     private Button btn_originalGame;
     private Button btn_timedGame;
     private Button btn_wordLength;
+    private Button btn_wordCategory;
     private Boolean isTimed;
+    private String category = "any";
+    private MediaPlayer mediaPlayer;
+    private TextView tv_splashScreenTitle;
+
+    //Start the music playing again when the activity is back in focus
+    @Override
+    protected void onRestart() {
+        mediaPlayer = MediaPlayer.create(this, R.raw.marimba_music);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+        super.onRestart();
+    }
+
+    //Stop the music from playing when the activity has lost focus
+    @Override
+    protected void onPause() {
+        mediaPlayer.stop();
+        super.onPause();
+    }
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -27,6 +47,10 @@ public class SplashScreen extends AppCompatActivity {
         //Find all views
         findViews();
 
+        mediaPlayer = MediaPlayer.create(this, R.raw.marimba_music);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+
         //Set Font for Views containing text
         final Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/crayon_font.ttf");
         setFonts(typeface);
@@ -35,9 +59,11 @@ public class SplashScreen extends AppCompatActivity {
         btn_originalGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mediaPlayer.stop();
                 isTimed = false;
                 Intent intent = new Intent(SplashScreen.this, MainActivity.class);
-                intent.putExtra("IS_TIMED", isTimed);
+                intent.putExtra("EXTRAS_TIMED", isTimed);
+                intent.putExtra("EXTRAS_CATEGORY", category);
                 startActivity(intent);
             }
         });
@@ -46,18 +72,28 @@ public class SplashScreen extends AppCompatActivity {
         btn_timedGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mediaPlayer.stop();
                 isTimed = true;
                 Intent intent = new Intent(SplashScreen.this, MainActivity.class);
-                intent.putExtra("IS_TIMED", isTimed);
+                intent.putExtra("EXTRAS_TIMED", isTimed);
+                intent.putExtra("EXTRAS_CATEGORY", category);
                 startActivity(intent);
             }
         });
 
-        //Show dialogue box to start a Word Length game
+        //Show dialogue box to word Length
         btn_wordLength.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialogueBox(v);
+                showLengthDialogueBox(v);
+            }
+        });
+
+        //Show dialogue box to chose a word category
+        btn_wordCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCategoryDialogueBox(v);
             }
         });
     }
@@ -68,6 +104,7 @@ public class SplashScreen extends AppCompatActivity {
         btn_originalGame = (Button) findViewById(R.id.original_game);
         btn_timedGame = (Button) findViewById(R.id.timed_game);
         btn_wordLength = (Button) findViewById(R.id.word_length);
+        btn_wordCategory = (Button) findViewById(R.id.word_category);
     }
 
     /** Apply fonts to all views containing text **/
@@ -78,12 +115,13 @@ public class SplashScreen extends AppCompatActivity {
         btn_originalGame.setTypeface(typeface);
         btn_timedGame.setTypeface(typeface);
         btn_wordLength.setTypeface(typeface);
+        btn_wordCategory.setTypeface(typeface);
     }
 
     /** Show Dialogue box to select a number **/
      /** @param view
      */
-    public void showDialogueBox(View view){
+    public void showLengthDialogueBox(View view){
 
         //TODO - Create custom layout for the dialogue box
 
@@ -114,12 +152,44 @@ public class SplashScreen extends AppCompatActivity {
                     case 4 : numberOfLetters = 7;
                         break;
                 }
+                mediaPlayer.stop();
                 Intent intent = new Intent(SplashScreen.this, MainActivity.class);
-                intent.putExtra("WORD_LENGTH", numberOfLetters);
+                intent.putExtra("EXTRAS_LENGTH", numberOfLetters);
+                intent.putExtra("EXTRAS_CATEGORY", category);
                 startActivity(intent);
             }
         });
         AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    /** Show dialogue box to select a category **/
+     /** @param view
+     */
+    private void showCategoryDialogueBox(View view) {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.activity_dialog_box);
+
+        //Array of possible categories
+        final String[] categories = {"Colours", "Countries", "Elements", "Vehicles", "Sports"};
+        //Create a Dialogue box
+        AlertDialog.Builder alertDialogueBuilder = new AlertDialog.Builder(this);
+        //Add a title
+        alertDialogueBuilder.setTitle("Pick a category");
+        //Set array as items
+        alertDialogueBuilder.setItems(categories, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Onclick position is relevant to the index of the array
+                category = categories[which];
+
+                mediaPlayer.stop();
+                Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+                intent.putExtra("EXTRAS_CATEGORY", category);
+                startActivity(intent);
+            }
+        });
+        AlertDialog alertDialog = alertDialogueBuilder.create();
         alertDialog.show();
     }
 }

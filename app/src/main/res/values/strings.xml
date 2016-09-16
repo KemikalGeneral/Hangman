@@ -6,6 +6,7 @@
     <string name="btn_splash_screen_original">Original</string>
     <string name="btn_splash_screen_timed">Timed</string>
     <string name="btn_splash_screen_word_by_length">Word by Length</string>
+    <string name="btn_splash_screen_word_by_category">Word by Category</string>
     <string name="et_hint">&#8230;pick a letter&#8230;</string>
     <string name="hangman_title">HaNgMaN</string>
     <string name="tv_category">Colour</string>
@@ -29,7 +30,7 @@
     <!--RIGHT Nav Drawer Items-->
     <array name="nav_settings">
         <item>New Word</item>
-        <item>Music</item>
+        <item>Turn music OFF</item>
         <item>Sound FX</item>
         <item>About</item>
     </array>

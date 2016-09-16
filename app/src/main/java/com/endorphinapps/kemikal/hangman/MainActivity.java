@@ -50,14 +50,37 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout usedLettersContainer;
     private List<String> letters;
     private List<String> usedLettersArray = new ArrayList<>();
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer music;
+    private MediaPlayer sounds;
+    private String category;
     private String currentLetter;
     private String word;
+    private String wordCategorySelected;
     private TextView tv_category;
     private TextView tv_splitWordLetters;
     private TextView tv_winLoseTimeBox;
     private Typeface typeface;
     private WordBank wordBank;
+
+    @Override
+    public void onBackPressed() {
+        if (music.isPlaying()) {
+            music.stop();
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onPause() {
+        stopMusic();
+        super.onPause();
+    }
+
+    @Override
+    protected void onRestart() {
+        playMusic();
+        super.onRestart();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -75,11 +98,14 @@ public class MainActivity extends AppCompatActivity {
 
         //Initialise Word Bank
         wordBank = new WordBank();
+        wordBank.readTextFileAsList(this, R.raw.words2);
 
         //Check whether the game is timed or not
         //Check if a word length has been selected
-        isTimed = getIntent().getBooleanExtra("IS_TIMED", false);
-        wordLengthSelected = getIntent().getIntExtra("WORD_LENGTH", 0);
+        //Check if a category has been selected
+        isTimed = getIntent().getBooleanExtra("EXTRAS_TIMED", false);
+        wordLengthSelected = getIntent().getIntExtra("EXTRAS_LENGTH", 0);
+        wordCategorySelected = getIntent().getStringExtra("EXTRAS_CATEGORY");
 
         //Start Game
         //Generate a random word from the word bank
@@ -152,10 +178,11 @@ public class MainActivity extends AppCompatActivity {
      * Action user entry,
      */
     private void startGame() {
-        //Get current amount of possible words
-        final int sizeOfWordBank = wordBank.getSizeOfWordBank();
 
-        //Get random word from Word Bank
+        //Get current amount of possible words
+        int sizeOfWordBank = wordBank.getSizeOfWordBank();
+
+        //Get random word (with Category) from Word Bank
         word = generateRandomWord(sizeOfWordBank);
 //        word = "ab"; //For testing purposes
 
@@ -166,18 +193,23 @@ public class MainActivity extends AppCompatActivity {
         //add them to the existing LinearLayout
         createViewsForLetters(letters);
 
+        //Set category TextView
+        tv_category.setText(category);
+
         //Enable keyboard in case it's set to hidden
         et_inputtedLetter.setShowSoftInputOnFocus(true);
 
         //If it is a TIMED game, start timer, if not, set running to false
         if (isTimed) {
             introCounter();
+            playMusic();
         } else {
             isTimerRunning = false;
+            playMusic();
         }
     }
 
-    /** Generate a Random Word From Word Bank **/
+    /** Generate a Random Word (with Category) From Word Bank **/
      /** @param sizeOfWordBank
      * @return
      */
@@ -185,12 +217,21 @@ public class MainActivity extends AppCompatActivity {
         //Generate a random number between 1 and the size of the word bank
         Random random = new Random();
         int randomNumber = random.nextInt(sizeOfWordBank);
-        //Retrieve a word based on the position of the random number
+        //Retrieve a word and category based on the position of the random number
         word = wordBank.getWord(randomNumber);
-        //Check if the word length is 0 (default for no length selected)
+        category = wordBank.getCategory(randomNumber);
+
+        //Check if a word length has been selected
         if (wordLengthSelected != 0) {
             //Keep looking for a word that is the selected length
             if (word.length() != wordLengthSelected){
+                generateRandomWord(sizeOfWordBank);
+            }
+        }
+
+        //Check if a category has been selected
+        if (!wordCategorySelected.equals("any")) {
+            if (!category.equals(wordCategorySelected)) {
                 generateRandomWord(sizeOfWordBank);
             }
         }
@@ -277,8 +318,8 @@ public class MainActivity extends AppCompatActivity {
                 //Advance correct answer counter
                 correctAnswerCounter++;
                 //Play 'correct' sound
-                mediaPlayer = MediaPlayer.create(this, R.raw.correct_answer);
-                mediaPlayer.start();
+                sounds = MediaPlayer.create(this, R.raw.correct_answer);
+                sounds.start();
                 //Make the letter visible;
                 TextView tv = (TextView) view;
                 tv.setTextColor(getResources().getColor(R.color.black));
@@ -300,8 +341,8 @@ public class MainActivity extends AppCompatActivity {
         //Advance 'wrong answer' counter
         wrongAnswerCounter++;
         //Play 'incorrect' sound
-        mediaPlayer = MediaPlayer.create(this, R.raw.wrong_answer);
-        mediaPlayer.start();
+        sounds = MediaPlayer.create(this, R.raw.wrong_answer);
+        sounds.start();
         //Use 'wrong answer' counter to select which stage of hangman to show
         int resources = 0;
         switch (wrongAnswerCounter) {
@@ -331,6 +372,8 @@ public class MainActivity extends AppCompatActivity {
      * Start game
      */
     private void resetGame() {
+        //Stop the music if it's running
+        stopMusic();
         clearAndHideKeyboard();
         //Stop the count down timer if it's running
         stopTimer();
@@ -353,6 +396,8 @@ public class MainActivity extends AppCompatActivity {
 
     /** You Win **/
     private void youWin() {
+        //Stop the music if it's running
+        stopMusic();
         //Stop the count down timer if it's running
         stopTimer();
         //Set hangman image to half transparency
@@ -372,6 +417,8 @@ public class MainActivity extends AppCompatActivity {
      * Set 'DEAD' text to visible
      */
     private void youLose() {
+        //Stop the music if it's running
+        stopMusic();
         //Stop the count down timer if it's running
         stopTimer();
         //Set hangman image to half transparency
@@ -525,8 +572,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
                 Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                intent.putExtra("IS_TIMED", isTimed);
-                intent.putExtra("WORD_LENGTH", wordLengthSelected);
+                intent.putExtra("EXTRAS_TIMED", isTimed);
+                intent.putExtra("EXTRAS_LENGTH", wordLengthSelected);
                 startActivity(intent);
             }
         });
@@ -552,20 +599,24 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 switch (position) {
-                    case 1 : //TODO add reset button
-                        resetGame();
+                    case 1 : resetGame();
                         break;
-                    case 2 : //TODO add music on/off toggle
+                    case 2 :
+                        TextView s = (TextView) listView_right.getChildAt(position);
+                        if (music.isPlaying()) {
+                            s.setText("Turn music ON");
+                            stopMusic();
+                        } else if (!music.isPlaying()) {
+                            s.setText("Turn music OFF");
+                            playMusic();
+                        }
                         break;
                     case 3 : //TODO add sound FX on/off toggle
                         break;
                     case 4 : //TODO add 'about'
                         break;
                 }
-                Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                intent.putExtra("IS_TIMED", isTimed);
-                intent.putExtra("WORD_LENGTH", wordLengthSelected);
-                startActivity(intent);
+                dl_drawerLayout.closeDrawer(listView_right);
             }
         });
     }
@@ -575,6 +626,26 @@ public class MainActivity extends AppCompatActivity {
         //Stop the count down timer if it's running
         if (isTimerRunning) {
             countDownTimer.cancel();
+        }
+    }
+
+    /** Plays the music associated with the type of game **/
+    private void playMusic() {
+        if (isTimed) {
+            music = MediaPlayer.create(this, R.raw.nintendo_style_music);
+        } else {
+            music = MediaPlayer.create(this, R.raw.doo_voice);
+        }
+        music.setLooping(true);
+        music.start();
+    }
+
+    /** Stops the music if it is playing **/
+    private void stopMusic() {
+        //Stop the music if it's running
+        if (music.isPlaying()) {
+            music.stop();
+            music.reset();
         }
     }
 }
