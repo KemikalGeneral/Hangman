@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Initialise Word Bank
         wordBank = new WordBank();
-        wordBank.readTextFileAsList(this, R.raw.words2);
+        wordBank.readTextFileAsList(this, R.raw.words3);
 
         //Check whether the game is timed or not
         //Check if a word length has been selected
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Get random word (with Category) from Word Bank
         word = generateRandomWord(sizeOfWordBank);
-//        word = "ab"; //For testing purposes
+//        word = "word with space"; //For testing purposes
 
         //Split word into an array of characters
         letters = splitWordIntoAnArrayOfLetters(word);
@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
             tv_splitWordLetters.setTag(letter);
             //Styling
             tv_splitWordLetters.setText(letter);
-            tv_splitWordLetters.setTextSize(56);
+            tv_splitWordLetters.setTextSize(48);
             tv_splitWordLetters.setTextColor(getResources().getColor(R.color.transparent));
             tv_splitWordLetters.setAllCaps(true);
             tv_splitWordLetters.setLetterSpacing(0.25f);

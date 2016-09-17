@@ -120,7 +120,7 @@
                     android:hint="@string/et_hint"
                     android:inputType="text"
                     android:maxLength="1"
-                    android:textSize="@dimen/text_size_normal" />
+                    android:textSize="@dimen/text_size_small" />
 
                 <!--Go button - Action user input-->
                 <Button

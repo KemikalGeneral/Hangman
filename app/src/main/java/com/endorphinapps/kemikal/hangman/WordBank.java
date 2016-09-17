@@ -40,7 +40,7 @@ public class WordBank extends AppCompatActivity{
                     category = line;
                 } else {
                     //Add to the array
-                    words.add(line);
+                    words.add(line.toLowerCase());
                     categories.add(category);
                 }
             }

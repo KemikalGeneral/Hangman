@@ -171,7 +171,9 @@ public class SplashScreen extends AppCompatActivity {
         dialog.setContentView(R.layout.activity_dialog_box);
 
         //Array of possible categories
-        final String[] categories = {"Colours", "Countries", "Elements", "Vehicles", "Sports"};
+        final String[] categories = {"Animals", "Body", "Car Parts", "Clothes", "Colours", "Countries", "Elements", "Family",
+                "Fruits", "Herbs & Spices", "Instruments", "Names (Boys)", "Names (girls)", "Metals", "Shapes", "Space", "Sports",
+                "Transport", "Vegetables", "Weather"};
         //Create a Dialogue box
         AlertDialog.Builder alertDialogueBuilder = new AlertDialog.Builder(this);
         //Add a title
