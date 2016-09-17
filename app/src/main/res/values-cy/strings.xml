@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hangman</string>
+    <string name="btn_go">Ewch</string>
+    <string name="btn_reset">Ail Gychwyn</string>
+    <string name="btn_splash_screen_original">Gwreiddiol</string>
+    <string name="btn_splash_screen_timed">Amseru</string>
+    <string name="btn_splash_screen_word_by_category">Categori</string>
+    <string name="btn_splash_screen_word_by_length">Hyd</string>
+    <string name="et_hint">dewiswch llythyren</string>
+    <string name="hangman_title">HaNgMaN</string>
+    <string name="tv_category">Lliw</string>
+    <string name="tv_nav_drawer_left_header">Dewiswch Gêm</string>
+    <string name="tv_nav_drawer_right_header">Opsiynau</string>
+    <string name="tv_used_letter_label">Llythyrenau</string>
+    <string name="tv_you_lose">Marw</string>
+    <string name="tv_you_win">Ennill</string>
+</resources>

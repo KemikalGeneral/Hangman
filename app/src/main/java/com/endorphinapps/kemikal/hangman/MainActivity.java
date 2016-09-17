@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private String wordCategorySelected;
     private TextView tv_category;
     private TextView tv_splitWordLetters;
+    private TextView tv_tapForNewWord;
     private TextView tv_winLoseTimeBox;
     private Typeface typeface;
     private WordBank wordBank;
@@ -160,6 +161,8 @@ public class MainActivity extends AppCompatActivity {
                 tv_category.setTypeface(typeface);///////////////////
         tv_winLoseTimeBox = (TextView) findViewById(R.id.tv_winLoseTimeBox);
                 tv_winLoseTimeBox.setTypeface(typeface);///////////////////////////
+        tv_tapForNewWord = (TextView) findViewById(R.id.tv_tap_for_new_word);
+                tv_tapForNewWord.setTypeface(typeface);///////////////////////////
         usedLettersContainer = (LinearLayout) findViewById(R.id.used_letters_container);
         //Nav Drawer
         dl_drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -267,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
             tv_splitWordLetters.setTag(letter);
             //Styling
             tv_splitWordLetters.setText(letter);
-            tv_splitWordLetters.setTextSize(48);
+            tv_splitWordLetters.setTextSize(40);
             tv_splitWordLetters.setTextColor(getResources().getColor(R.color.transparent));
             tv_splitWordLetters.setAllCaps(true);
             tv_splitWordLetters.setLetterSpacing(0.25f);
@@ -380,11 +383,14 @@ public class MainActivity extends AppCompatActivity {
         //Clear both counters
         correctAnswerCounter = 0;
         wrongAnswerCounter = 0;
+        //Clear 'Tap for new word' onClickListener
+        ll_pageContainer.setClickable(false);
         //Clear used letters
         usedLettersContainer.removeAllViews();
         usedLettersArray.clear();
         //Clear text
         tv_winLoseTimeBox.setText("");
+        tv_tapForNewWord.setVisibility(View.INVISIBLE);
         //Reset hangman image
         iv_hangman.setImageResource(R.drawable.hangman_0);
         iv_hangman.setAlpha(1.0f);
@@ -398,6 +404,9 @@ public class MainActivity extends AppCompatActivity {
     private void youWin() {
         //Stop the music if it's running
         stopMusic();
+        //Play win sound
+        music = MediaPlayer.create(this, R.raw.yeehaw3);
+        music.start();
         //Stop the count down timer if it's running
         stopTimer();
         //Set hangman image to half transparency
@@ -405,10 +414,13 @@ public class MainActivity extends AppCompatActivity {
         //Set text to Win, Green, Font and Visible
         tv_winLoseTimeBox.setText(getResources().getString(R.string.tv_you_win));
         tv_winLoseTimeBox.setTextColor(getResources().getColor(R.color.green));
-        tv_winLoseTimeBox.setTypeface(typeface);
         tv_winLoseTimeBox.setVisibility(View.VISIBLE);
+        //Show 'tap for new word'
+        tv_tapForNewWord.setVisibility(View.VISIBLE);
         //Disable the keyboard from further entries
         et_inputtedLetter.setShowSoftInputOnFocus(false);
+
+        playAgainDialogueBox();
     }
 
     /** You Lose **/
@@ -419,6 +431,9 @@ public class MainActivity extends AppCompatActivity {
     private void youLose() {
         //Stop the music if it's running
         stopMusic();
+        //Play lose sound
+        music = MediaPlayer.create(this, R.raw.ooooo);
+        music.start();
         //Stop the count down timer if it's running
         stopTimer();
         //Set hangman image to half transparency
@@ -426,8 +441,9 @@ public class MainActivity extends AppCompatActivity {
         //Set text to DEAD, Red, Font and visible
         tv_winLoseTimeBox.setText(getResources().getString(R.string.tv_you_lose));
         tv_winLoseTimeBox.setTextColor(getResources().getColor(R.color.red));
-        tv_winLoseTimeBox.setTypeface(typeface);
         tv_winLoseTimeBox.setVisibility(View.VISIBLE);
+        //Show 'tap for new word'
+        tv_tapForNewWord.setVisibility(View.VISIBLE);
         //Disable the keyboard from further entries
         et_inputtedLetter.setShowSoftInputOnFocus(false);
         //Loop through the current letters
@@ -441,6 +457,7 @@ public class MainActivity extends AppCompatActivity {
                 textView.setTextColor(getResources().getColor(R.color.red));
             }
         }
+        playAgainDialogueBox();
     }
 
     /** Clear and hide the keyboard **/
@@ -647,5 +664,15 @@ public class MainActivity extends AppCompatActivity {
             music.stop();
             music.reset();
         }
+    }
+
+    /** Set the screen clickable for a new word **/
+    private void playAgainDialogueBox() {
+        ll_pageContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetGame();
+            }
+        });
     }
 }
