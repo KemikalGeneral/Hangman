@@ -20,18 +20,14 @@
     <array name="nav_gameType">
         <item>Original Game</item>
         <item>Timed Game</item>
-        <item>3 Letters Long</item>
-        <item>4 Letters Long</item>
-        <item>5 Letters Long</item>
-        <item>6 Letters Long</item>
-        <item>7 Letters Long</item>
+        <item>Word by Length</item>
+        <item>Word by Category</item>
     </array>
 
     <!--RIGHT Nav Drawer Items-->
     <array name="nav_settings">
         <item>New Word</item>
         <item>Turn music OFF</item>
-        <item>Sound FX</item>
         <item>About</item>
     </array>
 

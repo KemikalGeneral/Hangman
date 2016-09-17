@@ -420,7 +420,7 @@ public class MainActivity extends AppCompatActivity {
         //Disable the keyboard from further entries
         et_inputtedLetter.setShowSoftInputOnFocus(false);
 
-        playAgainDialogueBox();
+        playAgainListener();
     }
 
     /** You Lose **/
@@ -457,7 +457,7 @@ public class MainActivity extends AppCompatActivity {
                 textView.setTextColor(getResources().getColor(R.color.red));
             }
         }
-        playAgainDialogueBox();
+        playAgainListener();
     }
 
     /** Clear and hide the keyboard **/
@@ -572,26 +572,30 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+
                 switch (position) {
                     case 1 : isTimed = false;
                         break;
                     case 2 : isTimed = true;
                         break;
-                    case 3 : wordLengthSelected = 3;
+                    case 3 :
+                        Intent lengthIntent = new Intent(MainActivity.this, SplashScreen.class);
+                        lengthIntent.putExtra("EXTRAS_LENGTH_DIALOGUE", true);
+                        startActivity(lengthIntent);
                         break;
-                    case 4 : wordLengthSelected = 4;
-                        break;
-                    case 5 : wordLengthSelected = 5;
-                        break;
-                    case 6 : wordLengthSelected = 6;
-                        break;
-                    case 7 : wordLengthSelected = 7;
+                    case 4 :
+                        Intent categoryIntent = new Intent(MainActivity.this, SplashScreen.class);
+                        categoryIntent.putExtra("EXTRAS_CATEGORY_DIALOGUE", true);
+                        startActivity(categoryIntent);
                         break;
                 }
-                Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                intent.putExtra("EXTRAS_TIMED", isTimed);
-                intent.putExtra("EXTRAS_LENGTH", wordLengthSelected);
-                startActivity(intent);
+                dl_drawerLayout.closeDrawer(listView_left);
+
+//                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+//                intent.putExtra("EXTRAS_TIMED", isTimed);
+//                intent.putExtra("EXTRAS_LENGTH", wordLengthSelected);
+//                intent.putExtra("EXTRAS_CATEGORY", category);
+//                startActivity(intent);
             }
         });
         /** RIGHT drawer **/    /** RIGHT drawer **/    /** RIGHT drawer **/    /** RIGHT drawer **/
@@ -619,18 +623,18 @@ public class MainActivity extends AppCompatActivity {
                     case 1 : resetGame();
                         break;
                     case 2 :
-                        TextView s = (TextView) listView_right.getChildAt(position);
+                        TextView textView = (TextView) listView_right.getChildAt(position);
                         if (music.isPlaying()) {
-                            s.setText("Turn music ON");
+                            textView.setText("Turn music ON");
+                            textView.setTextColor(getResources().getColor(R.color.green));
                             stopMusic();
                         } else if (!music.isPlaying()) {
-                            s.setText("Turn music OFF");
+                            textView.setText("Turn music OFF");
+                            textView.setTextColor(getResources().getColor(R.color.red));
                             playMusic();
                         }
                         break;
-                    case 3 : //TODO add sound FX on/off toggle
-                        break;
-                    case 4 : //TODO add 'about'
+                    case 3 : //TODO add about
                         break;
                 }
                 dl_drawerLayout.closeDrawer(listView_right);
@@ -667,7 +671,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /** Set the screen clickable for a new word **/
-    private void playAgainDialogueBox() {
+    private void playAgainListener() {
         ll_pageContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

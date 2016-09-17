@@ -3,6 +3,6 @@
     android:id="@+id/list_item_textview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="28sp"
+    android:textSize="@dimen/text_size_small"
     android:padding="16dp"
     android:textStyle="bold"/>

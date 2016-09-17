@@ -85,7 +85,7 @@ public class SplashScreen extends AppCompatActivity {
         btn_wordLength.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLengthDialogueBox(v);
+                showLengthDialogueBox();
             }
         });
 
@@ -93,9 +93,17 @@ public class SplashScreen extends AppCompatActivity {
         btn_wordCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showCategoryDialogueBox(v);
+                showCategoryDialogueBox();
             }
         });
+
+        //Open the respective dialogue box when requested from the MainActivity nav drawer
+        Intent intent = getIntent();
+        if (intent.hasExtra("EXTRAS_LENGTH_DIALOGUE")) {
+            showLengthDialogueBox();
+        } else if (intent.hasExtra("EXTRAS_CATEGORY_DIALOGUE")) {
+            showCategoryDialogueBox();
+        }
     }
 
     /** Find all Views **/
@@ -119,9 +127,7 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     /** Show Dialogue box to select a number **/
-     /** @param view
-     */
-    public void showLengthDialogueBox(View view){
+    public void showLengthDialogueBox(){
 
         //TODO - Create custom layout for the dialogue box
 
@@ -176,9 +182,7 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     /** Show dialogue box to select a category **/
-     /** @param view
-     */
-    private void showCategoryDialogueBox(View view) {
+    private void showCategoryDialogueBox() {
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.activity_dialog_box);
 
