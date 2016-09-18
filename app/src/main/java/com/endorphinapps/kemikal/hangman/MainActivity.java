@@ -3,6 +3,7 @@ package com.endorphinapps.kemikal.hangman;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView_left;
     private ListView listView_right;
 
+    private Boolean isMusicEnabled;
     private Boolean isTimed;
     private Boolean isTimerRunning;
     private Button btn_go;
@@ -64,12 +66,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_winLoseTimeBox;
     private Typeface typeface;
     private WordBank wordBank;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public void onBackPressed() {
-        if (music.isPlaying()) {
-            music.stop();
-        }
+        stopMusic();
         super.onBackPressed();
     }
 
@@ -89,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        sharedPreferences = getSharedPreferences("hangmanPrefs", MODE_PRIVATE);
+        isMusicEnabled = sharedPreferences.getBoolean("isMusicEnabled", true);
 
         //Set font
         typeface = Typeface.createFromAsset(getAssets(), "fonts/crayon_font.ttf");
@@ -622,6 +626,8 @@ public class MainActivity extends AppCompatActivity {
         listView_right.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Setup shared preferences for music on/off
+                SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 switch (position) {
                     case 1 : //New word
@@ -629,14 +635,22 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 2 : //Music on/off
                         TextView textView = (TextView) listView_right.getChildAt(position);
-                        if (music.isPlaying()) {
-                            textView.setText("Turn music ON");
-                            textView.setTextColor(getResources().getColor(R.color.green));
-                            stopMusic();
-                        } else if (!music.isPlaying()) {
-                            textView.setText("Turn music OFF");
-                            textView.setTextColor(getResources().getColor(R.color.red));
-                            playMusic();
+                            if (isMusicEnabled) {
+                                stopMusic();
+                                textView.setText("Turn music ON");
+                                textView.setTextColor(getResources().getColor(R.color.green));
+                                //Store choice
+                                isMusicEnabled = false;
+                                editor.putBoolean("isMusicEnabled", false);
+                                editor.commit();
+                        } else {
+                                textView.setText("Turn music OFF");
+                                textView.setTextColor(getResources().getColor(R.color.red));
+                                //Store choice for future use
+                                isMusicEnabled = true;
+                                editor.putBoolean("isMusicEnabled", true);
+                                editor.commit();
+                                playMusic();
                         }
                         break;
                     case 3 : //TODO add about
@@ -657,21 +671,23 @@ public class MainActivity extends AppCompatActivity {
 
     /** Plays the music associated with the type of game **/
     private void playMusic() {
-        if (isTimed) {
-            music = MediaPlayer.create(this, R.raw.nintendo_style_music);
-        } else {
-            music = MediaPlayer.create(this, R.raw.doo_voice);
+        if (isMusicEnabled) {
+            if (isTimed) {
+                music = MediaPlayer.create(this, R.raw.nintendo_style_music);
+            } else {
+                music = MediaPlayer.create(this, R.raw.doo_voice);
+            }
+            music.setLooping(true);
+            music.start();
         }
-        music.setLooping(true);
-        music.start();
     }
 
     /** Stops the music if it is playing **/
     private void stopMusic() {
         //Stop the music if it's running
-        if (music.isPlaying()) {
-            music.stop();
-            music.reset();
+        if (isMusicEnabled){
+                music.stop();
+                music.reset();
         }
     }
 

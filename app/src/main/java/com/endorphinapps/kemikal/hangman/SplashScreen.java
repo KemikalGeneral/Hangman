@@ -3,6 +3,7 @@ package com.endorphinapps.kemikal.hangman;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -14,28 +15,34 @@ import android.widget.TextView;
 
 public class SplashScreen extends AppCompatActivity {
 
+    private Boolean isMusicEnabled;
     private Button btn_originalGame;
     private Button btn_timedGame;
     private Button btn_wordLength;
     private Button btn_wordCategory;
     private Boolean isTimed;
     private String category = "any";
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer music;
     private TextView tv_splashScreenTitle;
+    private SharedPreferences sharedPreferences;
 
     //Start the music playing again when the activity is back in focus
     @Override
     protected void onRestart() {
-        mediaPlayer = MediaPlayer.create(this, R.raw.marimba_music);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+        if (isMusicEnabled) {
+            music = MediaPlayer.create(this, R.raw.marimba_music);
+            music.setLooping(true);
+            music.start();
+        }
         super.onRestart();
     }
 
     //Stop the music from playing when the activity has lost focus
     @Override
     protected void onPause() {
-        mediaPlayer.stop();
+        if (isMusicEnabled) {
+            stopMusic();
+        }
         super.onPause();
     }
 
@@ -44,12 +51,18 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
+        //Get SharedPreferences for music
+        sharedPreferences = getSharedPreferences("hangmanPrefs", MODE_PRIVATE);
+        isMusicEnabled = sharedPreferences.getBoolean("isMusicEnabled", true);
+
         //Find all views
         findViews();
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.marimba_music);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+        if (isMusicEnabled) {
+            music = MediaPlayer.create(this, R.raw.marimba_music);
+            music.setLooping(true);
+            music.start();
+        }
 
         //Set Font for Views containing text
         final Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/crayon_font.ttf");
@@ -59,7 +72,7 @@ public class SplashScreen extends AppCompatActivity {
         btn_originalGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mediaPlayer.stop();
+                stopMusic();
                 isTimed = false;
                 Intent intent = new Intent(SplashScreen.this, MainActivity.class);
                 intent.putExtra("EXTRAS_TIMED", isTimed);
@@ -72,7 +85,7 @@ public class SplashScreen extends AppCompatActivity {
         btn_timedGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mediaPlayer.stop();
+                stopMusic();
                 isTimed = true;
                 Intent intent = new Intent(SplashScreen.this, MainActivity.class);
                 intent.putExtra("EXTRAS_TIMED", isTimed);
@@ -96,14 +109,6 @@ public class SplashScreen extends AppCompatActivity {
                 showCategoryDialogueBox();
             }
         });
-
-//        //Open the respective dialogue box when requested from the MainActivity nav drawer
-//        Intent intent = getIntent();
-//        if (intent.hasExtra("EXTRAS_LENGTH_DIALOGUE")) {
-//            showLengthDialogueBox();
-//        } else if (intent.hasExtra("EXTRAS_CATEGORY_DIALOGUE")) {
-//            showCategoryDialogueBox();
-//        }
     }
 
     /** Find all Views **/
@@ -148,7 +153,7 @@ public class SplashScreen extends AppCompatActivity {
                 //Onclick position is relevant to the index of the array
                 int numberOfLetters = Integer.parseInt(amount[which]);
 
-                mediaPlayer.stop();
+                stopMusic();
                 Intent intent = new Intent(SplashScreen.this, MainActivity.class);
                 intent.putExtra("EXTRAS_LENGTH", numberOfLetters);
                 intent.putExtra("EXTRAS_CATEGORY", category);
@@ -179,7 +184,7 @@ public class SplashScreen extends AppCompatActivity {
                 //Onclick position is relevant to the index of the array
                 category = categories[which];
 
-                mediaPlayer.stop();
+                stopMusic();
                 Intent intent = new Intent(SplashScreen.this, MainActivity.class);
                 intent.putExtra("EXTRAS_CATEGORY", category);
                 startActivity(intent);
@@ -187,5 +192,11 @@ public class SplashScreen extends AppCompatActivity {
         });
         AlertDialog alertDialog = alertDialogueBuilder.create();
         alertDialog.show();
+    }
+
+    private void stopMusic() {
+        if (isMusicEnabled) {
+            music.stop();
+        }
     }
 }
