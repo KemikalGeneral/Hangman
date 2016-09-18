@@ -1,12 +1,14 @@
 package com.endorphinapps.kemikal.hangman;
 
+import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -572,30 +574,32 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-
                 switch (position) {
-                    case 1 : isTimed = false;
+                    case 1 : //Original Game
+                        isTimed = false;
+                        wordLengthSelected = 0;
+                        wordCategorySelected = "any";
                         break;
-                    case 2 : isTimed = true;
+                    case 2 : //Timed Game
+                        isTimed = true;
+                        wordLengthSelected = 0;
+                        wordCategorySelected = "any";
                         break;
-                    case 3 :
-                        Intent lengthIntent = new Intent(MainActivity.this, SplashScreen.class);
-                        lengthIntent.putExtra("EXTRAS_LENGTH_DIALOGUE", true);
-                        startActivity(lengthIntent);
+                    case 3 : //Word by Length
+                        isTimed = false;
+                        wordCategorySelected = "any";
+                        showLengthDialogueBox();
                         break;
-                    case 4 :
-                        Intent categoryIntent = new Intent(MainActivity.this, SplashScreen.class);
-                        categoryIntent.putExtra("EXTRAS_CATEGORY_DIALOGUE", true);
-                        startActivity(categoryIntent);
+                    case 4 : //Word by Category
+                        isTimed = false;
+                        wordLengthSelected = 0;
+                        showCategoryDialogueBox();
                         break;
                 }
                 dl_drawerLayout.closeDrawer(listView_left);
 
-//                Intent intent = new Intent(MainActivity.this, MainActivity.class);
-//                intent.putExtra("EXTRAS_TIMED", isTimed);
-//                intent.putExtra("EXTRAS_LENGTH", wordLengthSelected);
-//                intent.putExtra("EXTRAS_CATEGORY", category);
-//                startActivity(intent);
+                stopMusic();
+                resetGame();
             }
         });
         /** RIGHT drawer **/    /** RIGHT drawer **/    /** RIGHT drawer **/    /** RIGHT drawer **/
@@ -620,9 +624,10 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 switch (position) {
-                    case 1 : resetGame();
+                    case 1 : //New word
+                        resetGame();
                         break;
-                    case 2 :
+                    case 2 : //Music on/off
                         TextView textView = (TextView) listView_right.getChildAt(position);
                         if (music.isPlaying()) {
                             textView.setText("Turn music ON");
@@ -678,5 +683,62 @@ public class MainActivity extends AppCompatActivity {
                 resetGame();
             }
         });
+    }
+
+    /** Show Dialogue box to select a number **/
+    public void showLengthDialogueBox(){
+
+        //TODO - Create custom layout for the dialogue box
+
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.activity_dialog_box);
+
+        //Array of possible numbers for the list
+        final String[] amount = {"3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"};
+        //Create a Dialogue box
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        //Add a title
+        alertDialogBuilder.setTitle("How many letters?");
+        //Set array as items
+        alertDialogBuilder.setItems(amount, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                //Onclick position is relevant to the index of the array
+                wordLengthSelected = Integer.parseInt(amount[which]);
+
+                resetGame();
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    /** Show dialogue box to select a category **/
+    private void showCategoryDialogueBox() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.activity_dialog_box);
+
+        //Array of possible categories
+        final String[] categories = {"Animals", "Body", "Boys Names", "Car Parts", "Clothes", "Colours", "Countries", "Elements", "Family",
+                "Fruits", "Girls Names", "Herbs/Spices", "Instruments", "Metals", "Shapes", "Space", "Sports",
+                "Transport", "Vegetables", "Weather"};
+        //Create a Dialogue box
+        AlertDialog.Builder alertDialogueBuilder = new AlertDialog.Builder(this);
+        //Add a title
+        alertDialogueBuilder.setTitle("Pick a category");
+        //Set array as items
+        alertDialogueBuilder.setItems(categories, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                //Onclick position is relevant to the index of the array
+                wordCategorySelected = categories[which];
+
+                resetGame();
+            }
+        });
+        AlertDialog alertDialog = alertDialogueBuilder.create();
+        alertDialog.show();
     }
 }

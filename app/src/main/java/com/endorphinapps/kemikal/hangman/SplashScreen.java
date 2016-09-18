@@ -97,13 +97,13 @@ public class SplashScreen extends AppCompatActivity {
             }
         });
 
-        //Open the respective dialogue box when requested from the MainActivity nav drawer
-        Intent intent = getIntent();
-        if (intent.hasExtra("EXTRAS_LENGTH_DIALOGUE")) {
-            showLengthDialogueBox();
-        } else if (intent.hasExtra("EXTRAS_CATEGORY_DIALOGUE")) {
-            showCategoryDialogueBox();
-        }
+//        //Open the respective dialogue box when requested from the MainActivity nav drawer
+//        Intent intent = getIntent();
+//        if (intent.hasExtra("EXTRAS_LENGTH_DIALOGUE")) {
+//            showLengthDialogueBox();
+//        } else if (intent.hasExtra("EXTRAS_CATEGORY_DIALOGUE")) {
+//            showCategoryDialogueBox();
+//        }
     }
 
     /** Find all Views **/
@@ -135,7 +135,7 @@ public class SplashScreen extends AppCompatActivity {
         dialog.setContentView(R.layout.activity_dialog_box);
 
         //Array of possible numbers for the list
-        String[] amount = {"3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"};
+        final String[] amount = {"3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"};
         //Create a Dialogue box
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         //Add a title
@@ -144,32 +144,10 @@ public class SplashScreen extends AppCompatActivity {
         alertDialogBuilder.setItems(amount, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                int numberOfLetters = 0;
 
-                switch (which) {
-                    case 0 : numberOfLetters = 3;
-                        break;
-                    case 1 : numberOfLetters = 4;
-                        break;
-                    case 2 : numberOfLetters = 5;
-                        break;
-                    case 3 : numberOfLetters = 6;
-                        break;
-                    case 4 : numberOfLetters = 7;
-                        break;
-                    case 5 : numberOfLetters = 8;
-                        break;
-                    case 6 : numberOfLetters = 9;
-                        break;
-                    case 7 : numberOfLetters = 10;
-                        break;
-                    case 8 : numberOfLetters = 11;
-                        break;
-                    case 9 : numberOfLetters = 12;
-                        break;
-                    case 10 : numberOfLetters = 13;
-                        break;
-                }
+                //Onclick position is relevant to the index of the array
+                int numberOfLetters = Integer.parseInt(amount[which]);
+
                 mediaPlayer.stop();
                 Intent intent = new Intent(SplashScreen.this, MainActivity.class);
                 intent.putExtra("EXTRAS_LENGTH", numberOfLetters);
