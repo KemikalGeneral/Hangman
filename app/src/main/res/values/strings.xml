@@ -15,6 +15,7 @@
     <string name="tv_used_letter_label">Used Letters: </string>
     <string name="tv_you_lose">Dead</string>
     <string name="tv_you_win">Win</string>
+    <string name="tap_for_new_word">(Tap for a new word)</string>
 
     <!--LEFT Nav Drawer Items-->
     <array name="nav_gameType">

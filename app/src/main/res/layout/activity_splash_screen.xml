@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/paper_background_normal"
+    android:id="@+id/splash_screen_page_container"
     tools:context="com.endorphinapps.kemikal.hangman.SplashScreen">
 
     <TextView
@@ -23,6 +24,7 @@
         android:letterSpacing="0.25"/>
 
     <ImageView
+        android:id="@+id/hangman_image"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"

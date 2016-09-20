@@ -10,7 +10,12 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class SplashScreen extends AppCompatActivity {
@@ -21,6 +26,8 @@ public class SplashScreen extends AppCompatActivity {
     private Button btn_wordLength;
     private Button btn_wordCategory;
     private Boolean isTimed;
+    private ImageView iv_hangmanImage;
+    private LinearLayout ll_pageContainer;
     private String category = "any";
     private MediaPlayer music;
     private TextView tv_splashScreenTitle;
@@ -34,6 +41,8 @@ public class SplashScreen extends AppCompatActivity {
             music.setLooping(true);
             music.start();
         }
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.top_rocking);
+        iv_hangmanImage.startAnimation(animation);
         super.onRestart();
     }
 
@@ -109,15 +118,19 @@ public class SplashScreen extends AppCompatActivity {
                 showCategoryDialogueBox();
             }
         });
+
+        onLoadAnimation();
     }
 
     /** Find all Views **/
     private void findViews() {
         tv_splashScreenTitle = (TextView) findViewById(R.id.splash_screen_title);
+        iv_hangmanImage = (ImageView) findViewById(R.id.hangman_image);
         btn_originalGame = (Button) findViewById(R.id.original_game);
         btn_timedGame = (Button) findViewById(R.id.timed_game);
         btn_wordLength = (Button) findViewById(R.id.word_length);
         btn_wordCategory = (Button) findViewById(R.id.word_category);
+        ll_pageContainer = (LinearLayout) findViewById(R.id.splash_screen_page_container);
     }
 
     /** Apply fonts to all views containing text **/
@@ -198,5 +211,33 @@ public class SplashScreen extends AppCompatActivity {
         if (isMusicEnabled) {
             music.stop();
         }
+    }
+
+    private void onLoadAnimation() {
+        Animation animation5 = AnimationUtils.loadAnimation(this, R.anim.drop_down);
+        btn_wordCategory.startAnimation(animation5);
+
+        Animation animation4 = AnimationUtils.loadAnimation(this, R.anim.drop_down);
+        animation4.setStartOffset(250);
+        btn_wordLength.startAnimation(animation4);
+
+        Animation animation3 = AnimationUtils.loadAnimation(this, R.anim.drop_down);
+        animation3.setStartOffset(500);
+        btn_timedGame.startAnimation(animation3);
+
+        Animation animation2 = AnimationUtils.loadAnimation(this, R.anim.drop_down);
+        animation2.setStartOffset(750);
+        btn_originalGame.startAnimation(animation2);
+
+        Animation animation1 = AnimationUtils.loadAnimation(this, R.anim.drop_down);
+        animation1.setStartOffset(1000);
+        tv_splashScreenTitle.startAnimation(animation1);
+
+        AnimationSet animationSet = new AnimationSet(false);
+        Animation zoom = AnimationUtils.loadAnimation(this, R.anim.zoom_from_center);
+        zoom.setStartOffset(1250);
+        animationSet.addAnimation(zoom);
+        animationSet.addAnimation(AnimationUtils.loadAnimation(this, R.anim.top_rocking));
+        iv_hangmanImage.startAnimation(animationSet);
     }
 }

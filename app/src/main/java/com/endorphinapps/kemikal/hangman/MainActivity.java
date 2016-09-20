@@ -12,6 +12,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private List<String> usedLettersArray = new ArrayList<>();
     private MediaPlayer music;
     private MediaPlayer sounds;
+    private SharedPreferences sharedPreferences;
     private String category;
     private String currentLetter;
     private String word;
@@ -66,11 +69,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_winLoseTimeBox;
     private Typeface typeface;
     private WordBank wordBank;
-    private SharedPreferences sharedPreferences;
 
     @Override
     public void onBackPressed() {
         stopMusic();
+        stopTimer();
         super.onBackPressed();
     }
 
@@ -176,7 +179,6 @@ public class MainActivity extends AppCompatActivity {
         iv_settingsMenuIcon = (ImageView) findViewById(R.id.icon_settings_menu);
         listView_left = (ListView) findViewById(R.id.listView_left);
         listView_right = (ListView) findViewById(R.id.listView_right);
-
     }
 
     /** Start the game **/
@@ -284,6 +286,9 @@ public class MainActivity extends AppCompatActivity {
             tv_splitWordLetters.setTypeface(typeface);
             //Add views to layout
             currentLettersContainer.addView(tv_splitWordLetters);
+
+            playAnimations("onLoad");
+
         }
     }
 
@@ -381,6 +386,8 @@ public class MainActivity extends AppCompatActivity {
      * Start game
      */
     private void resetGame() {
+        //Stop the animation
+        tv_tapForNewWord.clearAnimation();
         //Stop the music if it's running
         stopMusic();
         clearAndHideKeyboard();
@@ -408,13 +415,15 @@ public class MainActivity extends AppCompatActivity {
 
     /** You Win **/
     private void youWin() {
+        //Stop the count down timer if it's running
+        stopTimer();
         //Stop the music if it's running
         stopMusic();
+        //Play TextView animation
+        playAnimations("winLose");
         //Play win sound
         music = MediaPlayer.create(this, R.raw.yeehaw3);
         music.start();
-        //Stop the count down timer if it's running
-        stopTimer();
         //Set hangman image to half transparency
         iv_hangman.setAlpha(0.25f);
         //Set text to Win, Green, Font and Visible
@@ -435,13 +444,15 @@ public class MainActivity extends AppCompatActivity {
      * Set 'DEAD' text to visible
      */
     private void youLose() {
+        //Stop the count down timer if it's running
+        stopTimer();
         //Stop the music if it's running
         stopMusic();
+        //Play TextView animation
+        playAnimations("winLose");
         //Play lose sound
         music = MediaPlayer.create(this, R.raw.ooooo);
         music.start();
-        //Stop the count down timer if it's running
-        stopTimer();
         //Set hangman image to half transparency
         iv_hangman.setAlpha(0.25f);
         //Set text to DEAD, Red, Font and visible
@@ -567,6 +578,7 @@ public class MainActivity extends AppCompatActivity {
         TextView tv = (TextView) header_gameType.findViewById(R.id.list_item_header);
         tv.setText(getResources().getString(R.string.tv_nav_drawer_left_header));
         tv.setTextColor(getResources().getColor(R.color.pink));
+        tv.setTypeface(typeface);
         //Add header to list
         listView_left.addHeaderView(header_gameType);
         //Set the adapter to the layout and array
@@ -756,5 +768,44 @@ public class MainActivity extends AppCompatActivity {
         });
         AlertDialog alertDialog = alertDialogueBuilder.create();
         alertDialog.show();
+    }
+
+    /** Play animations **/
+    /**
+     * @param name
+     */
+    public void playAnimations(String name) {
+        switch (name) {
+            case "onLoad" :
+                Animation hangman = AnimationUtils.loadAnimation(this, R.anim.zoom_from_center);
+                iv_hangman.startAnimation(hangman);
+
+                Animation category = AnimationUtils.loadAnimation(this, R.anim.zoom_from_center);
+                category.setStartOffset(500);
+                tv_category.startAnimation(category);
+
+                Animation newLetter = AnimationUtils.loadAnimation(this, R.anim.zoom_from_center);
+                newLetter.setStartOffset(1000);
+                tv_splitWordLetters.startAnimation(newLetter);
+
+                Animation inputLetter = AnimationUtils.loadAnimation(this, R.anim.zoom_from_center);
+                inputLetter.setStartOffset(1500);
+                et_inputtedLetter.startAnimation(inputLetter);
+
+                Animation goBtn = AnimationUtils.loadAnimation(this, R.anim.zoom_from_center);
+                goBtn.setStartOffset(2000);
+                btn_go.startAnimation(goBtn);
+                break;
+            case "winLose" :
+                Animation winLoseBox = AnimationUtils.loadAnimation(this, R.anim.zoom_from_center);
+                tv_winLoseTimeBox.startAnimation(winLoseBox);
+
+                Animation tapForNewGame = AnimationUtils.loadAnimation(this, R.anim.blink);
+                tv_tapForNewWord.startAnimation(tapForNewGame);
+
+                Animation swingHangman = AnimationUtils.loadAnimation(this, R.anim.top_rocking);
+                iv_hangman.startAnimation(swingHangman);
+                break;
+        }
     }
 }

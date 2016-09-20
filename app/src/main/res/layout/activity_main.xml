@@ -62,8 +62,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_winLoseTimeBox"
                 android:layout_centerHorizontal="true"
-                android:text="(Tap for a new word)"
+                android:text="@string/tap_for_new_word"
                 android:textSize="@dimen/text_size_small"
+                android:letterSpacing="0.1"
                 android:visibility="invisible"/>
 
         </RelativeLayout>
