@@ -3,7 +3,7 @@
 Picks a word at random from a collection of categorised words. The player can choose the letters they think are contained withing the word, with a correct answer revelaing the correct letter, and a wrong answer adding a piece to hangman.
 When all of the letters are revealed the player wins, but if all of the pieces of hangman are exposed, the game is over and lost.
 
-## Features:
+## Game Modes:
 
 #### Original Game...
 *A random word of any length, from any category with no time restriction.*
